@@ -1,19 +1,11 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely need to edit after that.
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'jekyll serve'. If you change this file, please restart the server process.
+auto: true
 
-# Site settings
-title: Hyper Ich
-email: mukosame@gmail.com
-description: > # this means to ignore newlines until "baseurl:"
-  A blog to dump all the little things about mukosame the hamster.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://mukosame.github.io" # the base hostname & protocol for your site
-twitter_username: NULL
-github_username:  mukosame
+#markdown: rdiscount
+highlighter: 'pygments'
+#paginate: 8
+permalink: /:title
 
-# Build settings
-markdown: kramdown
+title: Hyper Hamster
+url: http://mukosame.github.io
+feed: /atom.xml
+author_info: <a href="http://mukosame.github.io/">Mukosame</a>
