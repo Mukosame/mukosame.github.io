@@ -1,6 +1,7 @@
 auto: true
 
-#markdown: rdiscount
+markdown: rdiscount
+
 highlighter: 'pygments'
 #paginate: 8
 permalink: /:title
