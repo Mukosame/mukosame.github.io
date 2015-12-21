@@ -6,7 +6,7 @@
     * Revised:        Mukosame
     -->
     <meta charset="utf-8" />
-    <title>五月：病中的故事 | Mukosame's blog</title>
+    <title>如何搭建一个像这样的博客 | Mukosame's blog</title>
     <meta name="author" content="Mukosame" />
     <meta name="renderer" content="webkit">
     <meta name="description" content="Everything about Mukosame" />
@@ -44,21 +44,27 @@
 
 <div id="content">
     <div class="entry">
-        <h1 class="entry-title"><a href="/may-of-2015" title="五月：病中的故事">五月：病中的故事</a></h1>
-        <p class="entry-date">2015-02-10</p>
-        <p>五月是一个意义重大的月份，因为五月病就此开始。开学初的满满干劲已经消耗得差不多了，而鼓舞人心的成就却还迟迟没有出现。期中考试的紧张感刚刚过去，劈面而来的便是堆积下来的大量作业和七七八八的事务。学业上的症状是开始轻微厌学，而生活上的症状是开始萌发出逃跑的意愿。</p>
+        <h1 class="entry-title"><a href="/how-to-set-a-blog" title="如何搭建一个像这样的博客">如何搭建一个像这样的博客</a></h1>
+        <p class="entry-date">2015-12-19</p>
+        <p>这篇文章的目标人群是像我一样码力微弱的小白。所以，我们从如何申请一个<del>gayhub</del><a href="www.github.com">github</a>的账号开始，来教学如何利用jekyll+github来搭建一个看起来很酷帅的博客。需要提醒一句，“很酷帅”（也有人叫write like a hacker）的意思就是，你<strong>不能</strong>像正常人一样登陆到一个博客网站上去，点开“写新文章”然后写啊写然后发布就好了。但是你可以打开一个黑色窗口然后噼里啪啦敲上一串然后帅气地敲一下回车：砰！然后你的文章就发出来啦。</p>
 
-<p>从五月到十月，整整半年的时间，每个月我都会出现在≥3个不同的城市。</p>
+<h2>首先，申请一个github账号</h2>
 
-<p>五月的第一天，我就出现在了一个尘土飞扬的城市。和友人见了面轧了马路，突发奇想配了一副男式眼镜，然后又回到北京，和无数五颜六色的文艺青年一起抓着扶手晃啊晃到了通州河边的一片草地上，随着人流挤来挤去听着四处舞台飘来的歌声。之后一场妖风把所有人都吹了回去。所有人都灰头土脸且高兴得要死。</p>
+<p>进入<a href="https://github.com/">GitHub</a> ，点击“sign up”，就进入一般的注册页面了。</p>
 
-<p>几天后的周四我冲到北京西去赶一趟火车，到了之后才发现走错车站了，于是便毫无意外地误了车。大哭一场后终于在第二天上午站在了远东屠宰场前，看着晾衣绳和电线杆子间飘飘荡荡的东方明珠，悲壮又自豪地想：终于到了。</p>
+<p>注册完成后登陆，恭喜你，你已经成为了世界上最大的<del>同性交友</del>码猴社交网站的一员。我们的网站和网站的代码都会被托管到github上，之后你对网站的操作也要通过它来进行。</p>
 
-<p>然而现在回想起这些事情，只剩些淡淡的感觉了。它们是我稀松平常的日常中稍微不那么稀松平常的一些片段。就像漫画里突然走入一个新场景的小人儿，一边走一边遇到了新的人和事物，借此产生出一些吸引读者的故事。但如果只是换个场景，这作者便实在太无趣，那故事也变成了流水账样的游记。而旅游网站上到处都是游记。</p>
+<h2>然后，安装git</h2>
 
-<p>动荡的生活产生丰富的思想，并让人在忽然转角的时候瞥见生活的其他可能。新的干劲便由此而生。</p>
+<p>你需要在自己的电脑上安装一个客户端，也就是一个能让你愉快使用git的软件。虽然章鱼喵很萌，但是我仍然推荐你用<a href="http://www.git-scm.com/">Git</a>，简洁有力的命令行版本。</p>
 
-<p>喏，这就是我和五月病抗争的故事了。</p>
+<p>这里是Git的<a href="http://www.git-scm.com/downloads">下载地址</a>。Win/ Mac /Linux党都可以一本满足。下载完成后点击安装，后面的事情就大同小异了。</p>
+
+<p>哦对，为了你能使用得更自由奔放，可以在我的电脑（右键）-属性-高级系统设置-环境变量-PATH里找找看，有没有这一行：<em>E:\software</em>\Git\bin\;斜体的部分根据你安装的位置而定，也有可能是C:\Program Files\Git\bin\。有了这一行，你之后在任何命令行窗口都可以愉快地使用git了。</p>
+
+<p>在Windows下，打开Git Bash，其他系统下面则打开终端（Terminal）：</p>
+
+<p><img src="http://imglf0.nosdn.127.net/img/UlJvNXBPT29FZGJicVJWcXFOQXg5ZnU0TjY3NkdnbGNhRDZBSE1vditHMG45RmNrSm4za3JnPT0.png?imageView&amp;thumbnail=500x0&amp;quality=96&amp;stripmeta=0&amp;type=jpg" alt="terminal" /></p>
 
            <div id="disqus_container">
             <a href="#" class="comment" onclick="return false;">点击查看评论</a>
