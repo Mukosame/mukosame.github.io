@@ -7,18 +7,6 @@
         <atom:link href="http://mukosame.github.io/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
-                <title>如何搭建一个像这样的博客</title>
-                        
-                
-                    <description>&lt;p&gt;这篇文章的目标人群是像我一样码力微弱的小白。所以，我们从如何申请一个&lt;del&gt;gayhub&lt;/del&gt;&lt;a href=&quot;www.github.com&quot;&gt;github&lt;/a&gt;的账号开始，来教学如何利用jekyll+github来搭建一个看起来很酷帅的博客。需要提醒一句，“很酷帅”（也有人叫write like a hacker）的意思就是，你&lt;strong&gt;不能&lt;/strong&gt;像正常人一样登陆到一个博客网站上去，点开“写新文章”然后写啊写然后发布就好了。但是你可以打开一个黑色窗口然后噼里啪啦敲上一串然后帅气地敲一下回车：砰！然后你的文章就发出来啦。&lt;/p&gt;
-</description>
-                
-                <pubDate>Sat, 19 Dec 2015 00:00:00 +0800</pubDate>
-                <link>http://mukosame.github.io/how-to-set-a-blog</link>
-                <guid isPermaLink="true">http://mukosame.github.io/how-to-set-a-blog</guid>
-            </item>
-        
-            <item>
                 <title>The Wall</title>
                         
                 
@@ -268,6 +256,18 @@
                 <pubDate>Fri, 27 Nov 2015 00:00:00 +0800</pubDate>
                 <link>http://mukosame.github.io/sichuan-food-no-pepper</link>
                 <guid isPermaLink="true">http://mukosame.github.io/sichuan-food-no-pepper</guid>
+            </item>
+        
+            <item>
+                <title>以幻想取暖</title>
+                        
+                
+                    <description>&lt;p&gt;自从有了自己的小屋，生活便呈现出一种淡白色。淡白色，新棉花的颜色，杏仁奶糖的颜色，被水浸过的墙皮剥落的颜色，早上醒来刚睁开眼睛透过睫毛看到的颜色，被衰减过的市井杂声的颜色。噪声是有颜色的，这大概是大一核概论课上有关核电子学我记住的唯一内容。在心理区间上，淡白色给人以安适感，所以我曾经想过要发明一种LED眼罩和白噪声耳塞来帮助人在突然到来的环境和情绪下睡眠。这个想法，和千千万万个古怪的念头一样，当我确立下来后很快便发现有人早已做出类似的事情。在懊恼之余，又不免会产生出一种奇异的思念感——在千千万万里之外，在千千万万个时间单位之外，居然有人穿过了同样的心境和创造。所以我又不免想到，或许人的灵魂是连在一起的呢，就好像从一个水池里冒出的荷花，秋天过后大家都会回归水池，以类似人类补完计划的形式终结一切寂寞。&lt;/p&gt;
+</description>
+                
+                <pubDate>Mon, 12 Oct 2015 00:00:00 +0800</pubDate>
+                <link>http://mukosame.github.io/warm-fantasy</link>
+                <guid isPermaLink="true">http://mukosame.github.io/warm-fantasy</guid>
             </item>
         
     </channel>
