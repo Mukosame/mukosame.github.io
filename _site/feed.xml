@@ -7,6 +7,18 @@
         <atom:link href="http://mukosame.github.io/feed.xml" rel="self" type="application/rss+xml" />
         
             <item>
+                <title>如何准备一场科普讲座？</title>
+                        
+                
+                    <description>&lt;p&gt;本周刚刚在小学做了一场90分钟的讲座，趁热回答一下这个问题。&lt;/p&gt;
+</description>
+                
+                <pubDate>Sat, 09 Jan 2016 00:00:00 +0800</pubDate>
+                <link>http://mukosame.github.io/how-to-prepare-a-popsci-ppt</link>
+                <guid isPermaLink="true">http://mukosame.github.io/how-to-prepare-a-popsci-ppt</guid>
+            </item>
+        
+            <item>
                 <title>第一次开讲座</title>
                         
                 
@@ -22,7 +34,7 @@
                 <title>想看的一月新番</title>
                         
                 
-                    <description>&lt;h2&gt;亚人&lt;/h2&gt;
+                    <description>&lt;h2&gt;&lt;a href=&quot;http://movie.douban.com/subject/26608268/&quot;&gt;《亚人》&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;目前已经看过了剧场版&lt;a href=&quot;http://movie.douban.com/subject/26386465/&quot;&gt;《亚人1：冲动》&lt;/a&gt;，不夸张地讲，好看到让我忘了时间。&lt;/p&gt;
 </description>
@@ -230,18 +242,6 @@
                 <pubDate>Mon, 14 Dec 2015 00:00:00 +0800</pubDate>
                 <link>http://mukosame.github.io/kitsch-lyric</link>
                 <guid isPermaLink="true">http://mukosame.github.io/kitsch-lyric</guid>
-            </item>
-        
-            <item>
-                <title>哥本哈根：立场、责任与交流</title>
-                        
-                
-                    <description>&lt;blockquote&gt;&lt;p&gt; “A lot of people think the play is about moral questions, about whether scientists should work on weapons. And of course, moral questions do come into it. Before we can make any judgments of anyone, we have to understand why they are doing what they do. You can’t make judgment about anyone unless you have some knowledge of their intentions.”&lt;/p&gt;&lt;/blockquote&gt;
-</description>
-                
-                <pubDate>Sun, 13 Dec 2015 00:00:00 +0800</pubDate>
-                <link>http://mukosame.github.io/copenhagen</link>
-                <guid isPermaLink="true">http://mukosame.github.io/copenhagen</guid>
             </item>
         
     </channel>
