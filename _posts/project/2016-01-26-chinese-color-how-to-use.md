@@ -53,22 +53,22 @@ description: 姗姗来迟的使用帮助。多谢厚爱！
 
 点击任何一个颜色条目，都会更换背景色+解说文字。那么……
 
-右边这些文字究竟是什么意思呢？
----
+##右边这些文字究竟是什么意思呢？##
+
 嗯，就让我们用以上颜色为例，依次说明：
 
 ![第二个色谱样式解说](http://imglf.nosdn.127.net/img/UlJvNXBPT29FZGJPaEM1aldVa05XRlpNY25lZ2FIVGx4NG9kbnpFb3gxNTMrQXhvc2pYQU5nPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg)
 
 那么，就会有小朋友举手提问了：
 
-背景颜色太浅看不清字怎么办？
----
+##背景颜色太浅看不清字怎么办？##
+
 像这样：
 ![一片精白](http://imglf.nosdn.127.net/img/UlJvNXBPT29FZFl0VW9WOTB5dWxNK21FNmExUlBzQWZuUXJIUGN5K0xJTEh4M1dBYkFXVmNnPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg)
 
 ……请允许我做个悲伤的表情……
 
-不要慌不要急，我们摸一下屏幕右下角的“...”，在浮出的菜单中选择“深色”（就是那个A）：
+不要慌不要急，我们摸一下屏幕右下角的“...”，在浮出的菜单中选择“深色”（就是那个<u>A</u>）：
 ![深色](http://imglf.nosdn.127.net/img/UlJvNXBPT29FZFl0VW9WOTB5dWxNK0lVb0ViZGRRTjhvcGM4a2ZLMFJuU253NWRaVWxTbkNnPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg)
 
 哈！就可以变成这样子了！q(≧▽≦q)
@@ -76,8 +76,8 @@ description: 姗姗来迟的使用帮助。多谢厚爱！
 
 不过，由于某种很呆(lan)的原因，字的颜色并不能自动变化。不过私觉得，深色的字也一样美丽呢~~~
 
-我想保存当前美丽的颜色！
----
+##我想保存当前美丽的颜色！##
+
 这大概是窝的邮箱里收到的最多用户请求了。
 
 于是在右下角的“...”选单里，就有了这个“保存”按钮：
@@ -106,7 +106,7 @@ description: 姗姗来迟的使用帮助。多谢厚爱！
 ![相册查看](http://imglf.nosdn.127.net/img/UlJvNXBPT29FZGJPaEM1aldVa05XQ0pTMWdBZDFZRkVTaDE2NXovVVphcjdVSWZjK2NuU2RBPT0.png?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg)
 
 你还有啥想说的？
----
+------------------
 另外，作为一个闷骚的家伙，我当然要在这个应用里藏彩蛋咯~
 
 比如有机智的亲们发现有一天磁贴忽然变成一朵透明的莲花了：
@@ -123,6 +123,6 @@ description: 姗姗来迟的使用帮助。多谢厚爱！
 给这篇文章点赞请在下面留言/加赞b(￣▽￣)d；
 
 包养我请直接往下面的二维码打钱；
-![支付宝二维码]()
+![支付宝二维码](/images/alipay.png)
 
 想从我这里拿红包请自己想办法加微信吧，备注“Mukosame我找到你了!”
