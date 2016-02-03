@@ -8,7 +8,7 @@ description: 每年的清单都是在上一年的基础上迭代啊。欢迎fork
 
 ★ 欢迎fork，地址[今年年货买什么？](https://github.com/Mukosame/mukosame.github.io/blob/master/_posts/dump/2016-02-03-spring-festival-food-list.md)
 
-★ 对应的菜谱在这里：[今年年夜饭吃什么？](https://mukosame.github.io/dump/spring-festival-recipe-list)
+★ 对应的菜谱在这里：[今年年夜饭吃什么？](https://mukosame.github.io/spring-festival-recipe-list)
 
 ##肉类##
 
