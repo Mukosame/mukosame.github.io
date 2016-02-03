@@ -14,6 +14,7 @@ description: 每年都会有一些保留菜品呢。欢迎fork。
 
 * [北极虾刺身](http://www.xiachufang.com/recipe/100473808/)
 * 川味香肠片
+* [凉拌腐竹](http://www.xiachufang.com/recipe/100446410/)
 
 ##正菜##
 
@@ -30,13 +31,12 @@ description: 每年都会有一些保留菜品呢。欢迎fork。
 
 * [香菇炒青菜](http://www.xiachufang.com/recipe/1041422/)
 * [荷塘小炒](http://www.xiachufang.com/recipe/28643/)
+* [白灼秋葵](http://www.xiachufang.com/recipe/100363536/)
+* [蒜蓉金针菇](http://www.xiachufang.com/recipe/260237/)
 
 ##硬菜##
 
 * [红油汤锅](https://www.zhihu.com/question/21663896/answer/22198987)
-* [凉拌腐竹](http://www.xiachufang.com/recipe/100446410/)
-* [白灼秋葵](http://www.xiachufang.com/recipe/100363536/)
-* [蒜蓉金针菇](http://www.xiachufang.com/recipe/260237/)
 
 ##小食##
 
