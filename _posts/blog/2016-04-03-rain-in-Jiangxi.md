@@ -1,7 +1,7 @@
 ---
 layout:     post
 title: 少年听雨他乡中
-category: dump
+category: blog
 description: 路上行人欲断魂。
 ---
 雨，自从来时就没停过。
