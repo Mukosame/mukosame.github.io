@@ -71,3 +71,7 @@ If you go away
 
 If you go away
 
+//////////
+771 days together
+687 days without you
+Not anymore.
