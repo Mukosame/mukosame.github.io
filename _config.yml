@@ -7,7 +7,7 @@ highlighter: 'pygments'
 permalink: /:title
 
 name: “Dong Zhi's Blog”
-title: 技术与生活
+title: 技术与生活-支冬的个人博客
 description: 技术与生活.
 url: stacker.io
 feed: /atom.xml
