@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Jekyll出发学WEB
-categories: WEB
+categories: blog
 ---
 
 第一次看到github上的blog，就被github blog的风格自定义吸引住了。没有广告，没有固定的模板，没有XXX...,完全是一片净土啊。
