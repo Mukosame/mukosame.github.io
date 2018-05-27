@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 【OpenStack源码单排 一】创建磁盘 create_volume.py走读
-categories: OpenStack源码走读
+categories: blog
 ---
 *声明：本博客欢迎转发，但请保留原作者信息! 内容系本人学习、研究和总结，如有雷同，实属荣幸！*
  

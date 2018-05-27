@@ -1,7 +1,7 @@
 ---
 layout: post
 title: neutron之network初探
-categories: OpenStack
+categories: blog
 ---
 可能由于工作历史的原因，对网络一如既往的热情，openstack环境好之后，迫不及待的先实践下网络部分。
 

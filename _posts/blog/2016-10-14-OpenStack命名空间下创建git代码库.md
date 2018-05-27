@@ -1,7 +1,7 @@
 ---
 layout: post
 title: OpenStack命名空间下创建git代码库
-categories: OpenStack
+categories: blog
 ---
 
 

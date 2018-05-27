@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Nova之进程启动以及REST资源路由
-categories: OPENSTACK
+categories: blog
 ---
 
 首先从nova-api进程启动脚本出发，启动脚本为nova.cmd.all.py。

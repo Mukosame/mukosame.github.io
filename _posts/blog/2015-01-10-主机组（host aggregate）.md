@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 主机组（host aggregate）
-categories: OpenStack
+categories: blog
 ---
 
 主机组面向的是管理员;

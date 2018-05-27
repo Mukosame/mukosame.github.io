@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 【OpenStacks实践系列 一 】cinder创建type（volume-type）以及type的使用
-categories: OpenStacks实践
+categories: blog
 ---
 *声明：本博客欢迎转发，但请保留原作者信息! 内容系本人学习、研究和总结，如有雷同，实属荣幸！*
  

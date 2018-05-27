@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Nova之api-paste.ini笔记
-categories: OpenStack
+categories: blog
 ---
 
 本文代码为Juno版本。

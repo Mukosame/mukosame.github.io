@@ -1,7 +1,7 @@
 ---
 layout: post
 title: OpenStack实践之devstack
-categories: OpenStack
+categories: blog
 ---
 按照devstack官网介绍，执行完`./devstack.sh`后，经过各种网络问题后，安装完成。
 

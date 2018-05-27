@@ -1,7 +1,7 @@
 ---
 layout: post
 title: devstack中screen使用小结
-categories: OpenStack
+categories: blog
 ---
 
 

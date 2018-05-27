@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 解决suse操作系统没有message日志的问题
-categories: Linux
+categories: blog
 ---
 *声明：本博客欢迎转发，但请保留原作者信息! 内容系本人学习、研究和总结，如有雷同，实属荣幸！*
  
