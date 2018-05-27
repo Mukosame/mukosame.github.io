@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Linux Bridge
-categories: OpenStack
+categories: blog
 ---
 
 TUN/TAP 设备是一种让用户态程序向内核协议栈注入数据的设备
