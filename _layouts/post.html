@@ -47,21 +47,21 @@ layout: default
    </div>
    
     <div class="sidenav">
-        <h2>Blog</h2>
+        <h2>技术</h2>
         <ul class="artical-list">
         {% for post in site.categories.blog%}
             <li><a href="{{ post.url }}">{{ post.title }}</a></li>
         {% endfor %}
         </ul>
 
-        <h2>Dump</h2>
+        <h2>随笔</h2>
         <ul class="artical-list">
         {% for post in site.categories.dump%}
             <li><a href="{{ post.url }}">{{ post.title }}</a></li>
         {% endfor %}
         </ul>
 
-        <h2>Project</h2>
+        <h2>关于我</h2>
         <ul class="artical-list">
         {% for post in site.categories.project%}
             <li><a href="{{ post.url }}">{{ post.title }}</a></li>
