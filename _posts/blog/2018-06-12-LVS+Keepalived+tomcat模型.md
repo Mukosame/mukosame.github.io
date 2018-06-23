@@ -1,7 +1,7 @@
 ---
 layout: post
 title: LVS+Keepalived+tomcat配置示例
-description:单虚拟机LVS+Keepalived+tomcat配置示意，示意，示意...
+description: 单虚拟机LVS+Keepalived+tomcat配置示意，示意，示意...
 categories: blog
 ---
 

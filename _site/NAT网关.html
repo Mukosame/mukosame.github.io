@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    * Author:         BeiYuu
+    * Revised:        Mukosame
+    -->
+    <meta charset="utf-8" />
+    <title>NAT网关 | 技术与生活-支冬的个人博客</title>
+    <meta name="author" content="支冬" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="技术与生活" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <link rel="alternatecss" type="application/rss+xml" title="“Dong Zhi's Blog”" href="http://localhost:4000/feed.xml">
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="home-menu">
+        <div class="home-icon-con">
+            <a class="home-menu-icon" href="/">博客首页</a>
+            <a class="home-follow" href="#" title="联系我">+</a>
+        </div>
+        <div class="home-contact">
+            <a href="/MyWeiXin.JPG" target="_blank" style="margin-left:-5px;"><img src="/weixin.ico" alt="" width="22"/></a>
+            <a href="https://www.linkedin.com/in/%E5%86%AC-%E6%94%AF-b86453145/" target="_blank" style="text-align:center;"><img src="/Linkin.ico" alt="" width="22"/></a>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="/js/prettify/prettify.css" />
+<style type="text/css">
+    body { background:#e8e8e8; }
+    @media screen and (max-width: 750px){
+        body { background:#fff; }
+    }
+    @media screen and (max-width: 1020px){
+        body { background:#fff; }
+    }
+</style>
+
+<div id="content">
+    <div class="entry">
+        <h1 class="entry-title"><a href="/NAT%E7%BD%91%E5%85%B3" title="NAT网关">NAT网关</a></h1>
+        <p class="entry-date">2018-05-28</p>
+        <p>一般VPC内，均为服务器，包括WEB服务器，DB服务器等:<br />
+内部服务器存在可访问外网的诉求，但是一般只有WEB服务器暴露对公网可访问的IP或者域名。</p>
+
+<p>本文重点验证下内网访问外网的方案：
+测试平台：华为云(https://www.huaweicloud.com/)</p>
+
+<p>虚拟机绑定IP<br />
+一、创建一台虚拟机，不绑定弹性IP。<br />
+在虚拟机内ping baidu.com       ——–不通<br />
+二、创建一台虚拟机，绑定弹性IP。<br />
+在虚拟机内ping baidu.com       ——–通</p>
+
+<p>发散：弹性IP是收费资源，并且带宽并不便宜；故不可能每台服务器绑定一个弹性IP，用于内网访问外网</p>
+
+<p>为VPC配置NAT网关：<br />
+一个VPC只能配置一个Nat网关<br />
+一个NAT网关只能绑定一个弹性IP；</p>
+
+<p>看下NAT网关的技术属性：<br />
+一、基础属性<br />
+1、VPC<br />
+2、子网<br />
+3、规格（连接数）<br />
+二、规则<br />
+1、SNAT</p>
+
+<p><img src="https://github.com/XiaoDongZhi/XiaoDongZhi.github.io/blob/master/images/pubcloud/natsnat.jpg?raw=true" alt="" /></p>
+
+<p>关键属性：<br />
+   弹性IP：可访问外网，外网可访问的公网IP<br />
+   子网：VPC子网内部CIDR<br />
+   一个子网配置一个弹性IP，效果是该子网内所有私有IP的节点，可通过该SNAT规则通过弹性IP访问公网。<br />
+   再简单说下SNAT，即为源地址转换，内网访问外网的时候，目的地址是外网IP，原地址是私网地址；经过NAT网关时，SNAT会讲原地址修改为弹性IP访问外网。<br />
+   外网响应数据包返回时，即目的地址是NAT网关的弹性IP，源地址为外网IP。经过NAT网关时，NAT网关会将目的地址的弹性IP地址转换为虚拟机私网IP，转发给内网IP；</p>
+
+<p>验证结果：该子网内所有ECS可以访问公网，公网不能访问私网<br />
+2、DNAT</p>
+
+<p><img src="https://github.com/XiaoDongZhi/XiaoDongZhi.github.io/blob/master/images/pubcloud/natdnat.jpg?raw=true" alt="" /></p>
+
+<p>关键属性：<br />
+   弹性IP：与公网互访的IP<br />
+   私网IP：VPC内私网IP地址<br />
+   公网端口：通过弹性IP访问的时候，使用的端口<br />
+   私网端口：映射到VPC内对应私网IP的端口<br />
+   协议：TCP/UDP</p>
+
+<p>DNAT和子网没关系，只跟IP端口有关系<br />
+   可以这样理解，弹性IP+65535个端口  即可组合成65535个DNAT规则，每一条规则即弹性IP：端口-》私网IP：端口；<br />
+   弹性IP不变，端口可变并且唯一，多条DNAT规则公网端口不可重复；<br />
+   NAT网关中私网IP：端口组合不重复</p>
+
+<p>验证结果：<br />
+   配置：公网IP：22端口&lt;-&gt;私网IP：22端口<br />
+   通过putty使用ssh协议访问公网IP：22端口即可成功登陆到ECS后台。</p>
+
+<p>另外SNAT中的公网IP和DNAT的公网IP不能是一个公网IP</p>
+
+
+        <div id="disqus_container">
+            <class="comment"/>
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//mukosame.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        
+        </div>
+   </div>
+   
+    <div class="sidenav">
+        <h2>技术</h2>
+        <ul class="artical-list">
+        
+            <li><a href="/centos7-lvm%E6%89%A9%E5%A4%A7lv">LVM扩大LV</a></li>
+        
+            <li><a href="/lvm%E6%89%A9%E5%A4%A7lv">LVM扩大LV</a></li>
+        
+            <li><a href="/%E5%AF%B9%E7%AD%89%E8%BF%9E%E6%8E%A5">对等连接</a></li>
+        
+            <li><a href="/%E5%BC%B9%E6%80%A7%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1">弹性负载均衡</a></li>
+        
+            <li><a href="/NAT%E7%BD%91%E5%85%B3">NAT网关</a></li>
+        
+            <li><a href="/CAS%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95%E5%AE%9E%E8%B7%B5">CAS单点登录实践</a></li>
+        
+            <li><a href="/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E7%89%A9%E6%96%99%E4%BF%A1%E6%81%AF">实验室物料信息</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E5%9B%9B-nova-%E7%BB%99%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%B7%BB%E5%8A%A0%E5%88%A0%E9%99%A4%E7%BD%91%E5%8D%A1">【OpenStack实践系列 四 】nova 给虚拟机添加删除网卡</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%BA%94-nova-%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%9B%98%E8%99%9A%E6%8B%9F%E6%9C%BA">【OpenStack实践系列 五 】nova 创建多盘虚拟机</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%B8%89-nova-%E7%BB%99%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98">【OpenStack实践系列 三 】nova 给虚拟机挂载磁盘</a></li>
+        
+            <li><a href="/python-taskflow">taskflow</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%BA%8C-nova-%E5%90%AF%E5%8A%A8%E5%8D%B7%E5%90%AF%E5%8A%A8%E8%99%9A%E6%8B%9F%E6%9C%BA">【OpenStack操作系列 二 】 nova 启动卷启动虚拟机</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%B8%80-cinder%E5%88%9B%E5%BB%BAtype-volume-type-%E4%BB%A5%E5%8F%8Atype%E7%9A%84%E4%BD%BF%E7%94%A8">【OpenStacks实践系列 一 】cinder创建type（volume-type）以及type的使用</a></li>
+        
+            <li><a href="/Cinder%E4%BB%A3%E7%A0%81%E8%B5%B0%E8%AF%BB%E7%B3%BB%E5%88%97%E4%B8%80-%E5%88%9B%E5%BB%BA%E7%A3%81%E7%9B%98-%E4%BA%8C-cinder-volume">【OpenStack源码单排 一】创建磁盘 create_volume.py走读</a></li>
+        
+            <li><a href="/Cinder%E4%BB%A3%E7%A0%81%E8%B5%B0%E8%AF%BB%E7%B3%BB%E5%88%97%E4%B8%80-%E5%88%9B%E5%BB%BA%E7%A3%81%E7%9B%98-%E4%B8%80-cinder-api">【OpenStack源码单排 一】cinder创建磁盘总述（一）</a></li>
+        
+            <li><a href="/python-%E5%85%83%E7%B1%BB">python - 元类</a></li>
+        
+            <li><a href="/python-with%E8%AF%AD%E5%8F%A5">python with语句</a></li>
+        
+            <li><a href="/git%E5%B8%B8%E8%A7%81%E6%93%8D%E4%BD%9C%E5%A4%87%E5%BF%98">git常用操作备忘</a></li>
+        
+            <li><a href="/%E8%A7%A3%E5%86%B3suse%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%B2%A1%E6%9C%89message%E6%97%A5%E5%BF%97%E7%9A%84%E9%97%AE%E9%A2%98">解决suse操作系统没有message日志的问题</a></li>
+        
+            <li><a href="/pep8%E8%A7%84%E8%8C%83%E9%97%AE%E9%A2%98%E4%BF%AE%E6%94%B9">pep8规范问题修改</a></li>
+        
+            <li><a href="/devstack%E4%B8%ADscreen%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93">devstack中screen使用小结</a></li>
+        
+            <li><a href="/OpenStack%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E4%B8%8B%E5%88%9B%E5%BB%BAgit%E4%BB%A3%E7%A0%81%E5%BA%93">OpenStack命名空间下创建git代码库</a></li>
+        
+            <li><a href="/%E9%9A%8F%E7%AC%94%E7%A2%8E%E7%A2%8E%E5%BF%B5">随笔碎碎念</a></li>
+        
+            <li><a href="/android%E9%9B%B6%E6%95%A3%E7%9F%A5%E8%AF%86">android零散知识</a></li>
+        
+            <li><a href="/Volume%E5%AE%9E%E8%B7%B5">volume实践</a></li>
+        
+            <li><a href="/neutron%E4%B9%8Bnetwork">neutron之network初探</a></li>
+        
+            <li><a href="/openstack%E5%AE%9E%E8%B7%B5%E4%B9%8Bdevstack">OpenStack实践之devstack</a></li>
+        
+            <li><a href="/Docker%E5%85%AC%E5%BC%80%E8%AF%BE">虚拟三层路由转发</a></li>
+        
+            <li><a href="/%E4%B8%BB%E6%9C%BA%E7%BB%84-host-aggregate">主机组（host aggregate）</a></li>
+        
+            <li><a href="/Nova%E4%B9%8B%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E4%BB%A5%E5%8F%8AREST%E8%B5%84%E6%BA%90%E8%B7%AF%E7%94%B1">Nova API之进程启动以及REST资源路由</a></li>
+        
+            <li><a href="/Nova-API%E4%B9%8B%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E4%BB%A5%E5%8F%8AREST%E8%B5%84%E6%BA%90%E8%B7%AF%E7%94%B1">Nova之进程启动以及REST资源路由</a></li>
+        
+            <li><a href="/Nova%E4%B9%8Bapi-paste.ini%E7%AC%94%E8%AE%B0">Nova之api-paste.ini笔记</a></li>
+        
+            <li><a href="/Linux-Bridge">Linux Bridge</a></li>
+        
+            <li><a href="/HTML%E4%B8%8ECSS">HTML与CSS</a></li>
+        
+            <li><a href="/Jekyll%E5%87%BA%E5%8F%91%E5%AD%A6WEB">Jekyll出发学WEB</a></li>
+        
+            <li><a href="/WSGI%E5%88%9D%E6%8E%A2">WSGI初探</a></li>
+        
+        </ul>
+
+        <h2>随笔</h2>
+        <ul class="artical-list">
+        
+        </ul>
+
+        <h2>关于我</h2>
+        <ul class="artical-list">
+        
+        </ul>
+    </div>
+</div>
+
+<script src="/js/post.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function(){
+            $('.home-follow').click(function(e){
+                e.preventDefault();
+
+                if($('.home-contact').is(':visible')){
+                    $('.home-contact').slideUp(100);
+                }else{
+                    $('.home-contact').slideDown(100);
+                }
+            });
+        })
+    </script>
+</body>
+</html>

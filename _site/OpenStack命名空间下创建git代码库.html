@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    * Author:         BeiYuu
+    * Revised:        Mukosame
+    -->
+    <meta charset="utf-8" />
+    <title>OpenStack命名空间下创建git代码库 | 技术与生活-支冬的个人博客</title>
+    <meta name="author" content="支冬" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="技术与生活" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <link rel="alternatecss" type="application/rss+xml" title="“Dong Zhi's Blog”" href="http://localhost:4000/feed.xml">
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="home-menu">
+        <div class="home-icon-con">
+            <a class="home-menu-icon" href="/">博客首页</a>
+            <a class="home-follow" href="#" title="联系我">+</a>
+        </div>
+        <div class="home-contact">
+            <a href="/MyWeiXin.JPG" target="_blank" style="margin-left:-5px;"><img src="/weixin.ico" alt="" width="22"/></a>
+            <a href="https://www.linkedin.com/in/%E5%86%AC-%E6%94%AF-b86453145/" target="_blank" style="text-align:center;"><img src="/Linkin.ico" alt="" width="22"/></a>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="/js/prettify/prettify.css" />
+<style type="text/css">
+    body { background:#e8e8e8; }
+    @media screen and (max-width: 750px){
+        body { background:#fff; }
+    }
+    @media screen and (max-width: 1020px){
+        body { background:#fff; }
+    }
+</style>
+
+<div id="content">
+    <div class="entry">
+        <h1 class="entry-title"><a href="/OpenStack%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E4%B8%8B%E5%88%9B%E5%BB%BAgit%E4%BB%A3%E7%A0%81%E5%BA%93" title="OpenStack命名空间下创建git代码库">OpenStack命名空间下创建git代码库</a></h1>
+        <p class="entry-date">2016-10-14</p>
+        <p>一、Commit准备：使用https方式提交代码，非ssh方式</p>
+
+<p>1、签署ICLA
+（<code class="highlighter-rouge">https://review.openstack.org/#/settings/agreements</code>），注意一定要把信息填全，特别是<code class="highlighter-rouge">https://review.openstack.org/#/settings/contact</code>里下面那几个，如果之前没有在OpenStack Foundation注册，会提示注册。如果是代表公司，邮箱最好是公司(huawei)邮箱。
+可能会用到的英文：
+公司名：<code class="highlighter-rouge">Huawei Technologies Co. Ltd</code></p>
+
+<p>2、配置Git Bash</p>
+
+<p><code class="highlighter-rouge">git config --global user.name "XXX"</code></p>
+
+<p><code class="highlighter-rouge">git config --global user.email "XXX@XXXXXX.com"</code></p>
+
+<p>注意跟gerrit账户一致。</p>
+
+<p>3、安装git-review</p>
+
+<p>参见：<code class="highlighter-rouge">http://www.mediawiki.org/wiki/Gerrit/git-review</code></p>
+
+<p>4、配置git config</p>
+
+<p>下载代码，以openstack-infra为例：</p>
+
+<p><code class="highlighter-rouge">Git clone https://github.com/openstack-finra/project-config.git</code></p>
+
+<p>先确保代码是最新的：</p>
+
+<p><code class="highlighter-rouge">git checkout master</code></p>
+
+<p><code class="highlighter-rouge">git pull</code></p>
+
+<p>配置git config。命令如下
+<code class="highlighter-rouge">git config -e</code></p>
+
+<p>在remote gerrit处，填写自己的openstack username和password。地址：<code class="highlighter-rouge">https://review.openstack.org/#/settings/http-password</code>，结果如下图：
+<img src="http://i.imgur.com/XfJojdR.jpg" alt="" /></p>
+
+<p>5、修改代码提交代码
+针对bug，bp等，初次提交代码，使用<code class="highlighter-rouge">git commit -a</code>，提交完成后生成<code class="highlighter-rouge">changed Id</code>。</p>
+
+<p>6、创建code review</p>
+
+<p><code class="highlighter-rouge">git review -t new-project</code></p>
+
+<p>二、根据review以及jenkins check结果修改提交
+提交review后，在review.openstack.org上找到自己提交的review详情页面。
+查看<code class="highlighter-rouge">Jenkins check</code>结果。</p>
+
+<p>点击“FAILED”的check项名称，跳转至文件目录，如下图：
+<img src="http://i.imgur.com/4c5KFWa.jpg" alt="" /></p>
+
+<p>查看console.html内容。根据里面的失败内容进行修正。</p>
+
+<p>另外：</p>
+
+<p><code class="highlighter-rouge">gerrit/projects.yaml</code></p>
+
+<p><code class="highlighter-rouge">jenkins/jobs/projects.yaml</code></p>
+
+<p><code class="highlighter-rouge">zuul/layout.yaml</code></p>
+
+<p>里面新添加的项目信息，必须按照字母顺序填写，否则<code class="highlighter-rouge">Jenkins check failed</code>。</p>
+
+<p>三、commit message
+commit message要有标题，类似于邮件主题
+commit message内容不要有“fix jenkins error”等处理信息。</p>
+
+
+        <div id="disqus_container">
+            <class="comment"/>
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//mukosame.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        
+        </div>
+   </div>
+   
+    <div class="sidenav">
+        <h2>技术</h2>
+        <ul class="artical-list">
+        
+            <li><a href="/centos7-lvm%E6%89%A9%E5%A4%A7lv">LVM扩大LV</a></li>
+        
+            <li><a href="/lvm%E6%89%A9%E5%A4%A7lv">LVM扩大LV</a></li>
+        
+            <li><a href="/%E5%AF%B9%E7%AD%89%E8%BF%9E%E6%8E%A5">对等连接</a></li>
+        
+            <li><a href="/%E5%BC%B9%E6%80%A7%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1">弹性负载均衡</a></li>
+        
+            <li><a href="/NAT%E7%BD%91%E5%85%B3">NAT网关</a></li>
+        
+            <li><a href="/CAS%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95%E5%AE%9E%E8%B7%B5">CAS单点登录实践</a></li>
+        
+            <li><a href="/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E7%89%A9%E6%96%99%E4%BF%A1%E6%81%AF">实验室物料信息</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E5%9B%9B-nova-%E7%BB%99%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%B7%BB%E5%8A%A0%E5%88%A0%E9%99%A4%E7%BD%91%E5%8D%A1">【OpenStack实践系列 四 】nova 给虚拟机添加删除网卡</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%BA%94-nova-%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%9B%98%E8%99%9A%E6%8B%9F%E6%9C%BA">【OpenStack实践系列 五 】nova 创建多盘虚拟机</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%B8%89-nova-%E7%BB%99%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98">【OpenStack实践系列 三 】nova 给虚拟机挂载磁盘</a></li>
+        
+            <li><a href="/python-taskflow">taskflow</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%BA%8C-nova-%E5%90%AF%E5%8A%A8%E5%8D%B7%E5%90%AF%E5%8A%A8%E8%99%9A%E6%8B%9F%E6%9C%BA">【OpenStack操作系列 二 】 nova 启动卷启动虚拟机</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%B8%80-cinder%E5%88%9B%E5%BB%BAtype-volume-type-%E4%BB%A5%E5%8F%8Atype%E7%9A%84%E4%BD%BF%E7%94%A8">【OpenStacks实践系列 一 】cinder创建type（volume-type）以及type的使用</a></li>
+        
+            <li><a href="/Cinder%E4%BB%A3%E7%A0%81%E8%B5%B0%E8%AF%BB%E7%B3%BB%E5%88%97%E4%B8%80-%E5%88%9B%E5%BB%BA%E7%A3%81%E7%9B%98-%E4%BA%8C-cinder-volume">【OpenStack源码单排 一】创建磁盘 create_volume.py走读</a></li>
+        
+            <li><a href="/Cinder%E4%BB%A3%E7%A0%81%E8%B5%B0%E8%AF%BB%E7%B3%BB%E5%88%97%E4%B8%80-%E5%88%9B%E5%BB%BA%E7%A3%81%E7%9B%98-%E4%B8%80-cinder-api">【OpenStack源码单排 一】cinder创建磁盘总述（一）</a></li>
+        
+            <li><a href="/python-%E5%85%83%E7%B1%BB">python - 元类</a></li>
+        
+            <li><a href="/python-with%E8%AF%AD%E5%8F%A5">python with语句</a></li>
+        
+            <li><a href="/git%E5%B8%B8%E8%A7%81%E6%93%8D%E4%BD%9C%E5%A4%87%E5%BF%98">git常用操作备忘</a></li>
+        
+            <li><a href="/%E8%A7%A3%E5%86%B3suse%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%B2%A1%E6%9C%89message%E6%97%A5%E5%BF%97%E7%9A%84%E9%97%AE%E9%A2%98">解决suse操作系统没有message日志的问题</a></li>
+        
+            <li><a href="/pep8%E8%A7%84%E8%8C%83%E9%97%AE%E9%A2%98%E4%BF%AE%E6%94%B9">pep8规范问题修改</a></li>
+        
+            <li><a href="/devstack%E4%B8%ADscreen%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93">devstack中screen使用小结</a></li>
+        
+            <li><a href="/OpenStack%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E4%B8%8B%E5%88%9B%E5%BB%BAgit%E4%BB%A3%E7%A0%81%E5%BA%93">OpenStack命名空间下创建git代码库</a></li>
+        
+            <li><a href="/%E9%9A%8F%E7%AC%94%E7%A2%8E%E7%A2%8E%E5%BF%B5">随笔碎碎念</a></li>
+        
+            <li><a href="/android%E9%9B%B6%E6%95%A3%E7%9F%A5%E8%AF%86">android零散知识</a></li>
+        
+            <li><a href="/Volume%E5%AE%9E%E8%B7%B5">volume实践</a></li>
+        
+            <li><a href="/neutron%E4%B9%8Bnetwork">neutron之network初探</a></li>
+        
+            <li><a href="/openstack%E5%AE%9E%E8%B7%B5%E4%B9%8Bdevstack">OpenStack实践之devstack</a></li>
+        
+            <li><a href="/Docker%E5%85%AC%E5%BC%80%E8%AF%BE">虚拟三层路由转发</a></li>
+        
+            <li><a href="/%E4%B8%BB%E6%9C%BA%E7%BB%84-host-aggregate">主机组（host aggregate）</a></li>
+        
+            <li><a href="/Nova%E4%B9%8B%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E4%BB%A5%E5%8F%8AREST%E8%B5%84%E6%BA%90%E8%B7%AF%E7%94%B1">Nova API之进程启动以及REST资源路由</a></li>
+        
+            <li><a href="/Nova-API%E4%B9%8B%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E4%BB%A5%E5%8F%8AREST%E8%B5%84%E6%BA%90%E8%B7%AF%E7%94%B1">Nova之进程启动以及REST资源路由</a></li>
+        
+            <li><a href="/Nova%E4%B9%8Bapi-paste.ini%E7%AC%94%E8%AE%B0">Nova之api-paste.ini笔记</a></li>
+        
+            <li><a href="/Linux-Bridge">Linux Bridge</a></li>
+        
+            <li><a href="/HTML%E4%B8%8ECSS">HTML与CSS</a></li>
+        
+            <li><a href="/Jekyll%E5%87%BA%E5%8F%91%E5%AD%A6WEB">Jekyll出发学WEB</a></li>
+        
+            <li><a href="/WSGI%E5%88%9D%E6%8E%A2">WSGI初探</a></li>
+        
+        </ul>
+
+        <h2>随笔</h2>
+        <ul class="artical-list">
+        
+        </ul>
+
+        <h2>关于我</h2>
+        <ul class="artical-list">
+        
+        </ul>
+    </div>
+</div>
+
+<script src="/js/post.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function(){
+            $('.home-follow').click(function(e){
+                e.preventDefault();
+
+                if($('.home-contact').is(':visible')){
+                    $('.home-contact').slideUp(100);
+                }else{
+                    $('.home-contact').slideDown(100);
+                }
+            });
+        })
+    </script>
+</body>
+</html>

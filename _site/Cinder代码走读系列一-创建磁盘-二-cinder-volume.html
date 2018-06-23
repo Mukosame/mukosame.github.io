@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    * Author:         BeiYuu
+    * Revised:        Mukosame
+    -->
+    <meta charset="utf-8" />
+    <title>【OpenStack源码单排 一】创建磁盘 create_volume.py走读 | 技术与生活-支冬的个人博客</title>
+    <meta name="author" content="支冬" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="技术与生活" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <link rel="alternatecss" type="application/rss+xml" title="“Dong Zhi's Blog”" href="http://localhost:4000/feed.xml">
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="home-menu">
+        <div class="home-icon-con">
+            <a class="home-menu-icon" href="/">博客首页</a>
+            <a class="home-follow" href="#" title="联系我">+</a>
+        </div>
+        <div class="home-contact">
+            <a href="/MyWeiXin.JPG" target="_blank" style="margin-left:-5px;"><img src="/weixin.ico" alt="" width="22"/></a>
+            <a href="https://www.linkedin.com/in/%E5%86%AC-%E6%94%AF-b86453145/" target="_blank" style="text-align:center;"><img src="/Linkin.ico" alt="" width="22"/></a>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="/js/prettify/prettify.css" />
+<style type="text/css">
+    body { background:#e8e8e8; }
+    @media screen and (max-width: 750px){
+        body { background:#fff; }
+    }
+    @media screen and (max-width: 1020px){
+        body { background:#fff; }
+    }
+</style>
+
+<div id="content">
+    <div class="entry">
+        <h1 class="entry-title"><a href="/Cinder%E4%BB%A3%E7%A0%81%E8%B5%B0%E8%AF%BB%E7%B3%BB%E5%88%97%E4%B8%80-%E5%88%9B%E5%BB%BA%E7%A3%81%E7%9B%98-%E4%BA%8C-cinder-volume" title="【OpenStack源码单排 一】创建磁盘 create_volume.py走读">【OpenStack源码单排 一】创建磁盘 create_volume.py走读</a></h1>
+        <p class="entry-date">2016-12-02</p>
+        <p><em>声明：本博客欢迎转发，但请保留原作者信息! 内容系本人学习、研究和总结，如有雷同，实属荣幸！</em></p>
+
+<p><em>新浪微博：<a href="http://weibo.com/u/1596536485/home?wvr=5">@支支zHi小冬</a></em></p>
+
+<p><em>博客地址：<a href="http://xiaodongzhi.github.io/">http://xiaodongzhi.github.io/</a></em></p>
+
+<p><em>联系邮箱：517341003@qq.com</em></p>
+
+<p>openstack版本信息：ocata</p>
+
+<p>/opt/stack/cinder/cinder/volume/flows/manager/create_volume.py(809)execute()</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">volume_spec</span><span class="p">):</span>
+<span class="err">入参说明：</span>
+<span class="n">volume_spec</span><span class="p">:</span>
+<span class="p">{</span><span class="s">'status'</span><span class="p">:</span> <span class="s">u'creating'</span><span class="p">,</span> <span class="s">'image_location'</span><span class="p">:</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">),</span> <span class="s">'image_id'</span><span class="p">:</span> <span class="s">'801a7b53-1e25-4f49-b0f3-d2dd61a9f388'</span><span class="p">,</span> <span class="s">'volume_id'</span><span class="p">:</span> <span class="s">'eddfec51-9bc5-4649-8050-96ef7b909b30'</span><span class="p">,</span> <span class="s">'volume_size'</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s">'image_service'</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">cinder</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">glance</span><span class="o">.</span><span class="n">GlanceImageService</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7f6d37f6a710</span><span class="o">&gt;</span><span class="p">,</span> <span class="s">'image_meta'</span><span class="p">:</span> <span class="p">{</span><span class="s">'status'</span><span class="p">:</span> <span class="s">u'active'</span><span class="p">,</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">u'VSA'</span><span class="p">,</span> <span class="s">'deleted'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'container_format'</span><span class="p">:</span> <span class="s">u'bare'</span><span class="p">,</span> <span class="s">'created_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=&lt;</span><span class="n">iso8601</span><span class="o">.</span><span class="n">Utc</span><span class="o">&gt;</span><span class="p">),</span> <span class="s">'disk_format'</span><span class="p">:</span> <span class="s">u'vhd'</span><span class="p">,</span> <span class="s">'updated_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=&lt;</span><span class="n">iso8601</span><span class="o">.</span><span class="n">Utc</span><span class="o">&gt;</span><span class="p">),</span> <span class="s">'id'</span><span class="p">:</span> <span class="s">u'801a7b53-1e25-4f49-b0f3-d2dd61a9f388'</span><span class="p">,</span> <span class="s">'owner'</span><span class="p">:</span> <span class="s">u'cfa52d30378146cbaabb4670cc6f0786'</span><span class="p">,</span> <span class="s">'protected'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'min_ram'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'checksum'</span><span class="p">:</span> <span class="s">u'99396230fb8b6617b8784173ac3d0727'</span><span class="p">,</span> <span class="s">'min_disk'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'is_public'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">'deleted_at'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'properties'</span><span class="p">:</span> <span class="p">{</span><span class="s">u'os-type'</span><span class="p">:</span> <span class="s">u'Linux'</span><span class="p">,</span> <span class="s">u'os_distro'</span><span class="p">:</span> <span class="s">u'Novell SUSE Linux Enterprise Server 11 SP3 64bit'</span><span class="p">,</span> <span class="s">u'os_type'</span><span class="p">:</span> <span class="s">u'Linux'</span><span class="p">},</span> <span class="s">'size'</span><span class="p">:</span> <span class="mi">787726336</span><span class="p">},</span> <span class="s">'volume_name'</span><span class="p">:</span> <span class="s">'volume-eddfec51-9bc5-4649-8050-96ef7b909b30'</span><span class="p">,</span> <span class="s">'type'</span><span class="p">:</span> <span class="s">'image'</span><span class="p">}</span>
+
+<span class="n">volume</span><span class="p">:</span>
+<span class="n">Volume</span><span class="p">(</span><span class="n">_name_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">admin_metadata</span><span class="o">=</span><span class="p">{},</span><span class="n">attach_status</span><span class="o">=</span><span class="s">'detached'</span><span class="p">,</span><span class="n">availability_zone</span><span class="o">=</span><span class="s">'nova'</span><span class="p">,</span><span class="n">bootable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">cluster</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">cluster_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">consistencygroup</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">consistencygroup_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">created_at</span><span class="o">=</span><span class="mi">2016</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mo">05</span><span class="n">T10</span><span class="p">:</span><span class="mo">05</span><span class="p">:</span><span class="mi">25</span><span class="n">Z</span><span class="p">,</span><span class="n">deleted</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">deleted_at</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">display_description</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">display_name</span><span class="o">=</span><span class="s">'zd2'</span><span class="p">,</span><span class="n">ec2_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">encryption_key_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">glance_metadata</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">group</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">group_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">host</span><span class="o">=</span><span class="s">'jenkins@DS01#DS02'</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="n">eddfec51</span><span class="o">-</span><span class="mi">9</span><span class="n">bc5</span><span class="o">-</span><span class="mi">4649</span><span class="o">-</span><span class="mi">8050</span><span class="o">-</span><span class="mi">96</span><span class="n">ef7b909b30</span><span class="p">,</span><span class="n">launched_at</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">metadata</span><span class="o">=</span><span class="p">{},</span><span class="n">migration_status</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">multiattach</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">previous_status</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">project_id</span><span class="o">=</span><span class="s">'cfa52d30378146cbaabb4670cc6f0786'</span><span class="p">,</span><span class="n">provider_auth</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">provider_geometry</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">provider_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">provider_location</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">replication_driver_data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">replication_extended_status</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">replication_status</span><span class="o">=</span><span class="s">'disabled'</span><span class="p">,</span><span class="n">scheduled_at</span><span class="o">=</span><span class="mi">2016</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mo">05</span><span class="n">T10</span><span class="p">:</span><span class="mo">05</span><span class="p">:</span><span class="mi">25</span><span class="n">Z</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">snapshot_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">snapshots</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">source_volid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">status</span><span class="o">=</span><span class="s">'creating'</span><span class="p">,</span><span class="n">terminated_at</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">updated_at</span><span class="o">=</span><span class="mi">2016</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mo">05</span><span class="n">T10</span><span class="p">:</span><span class="mo">05</span><span class="p">:</span><span class="mi">25</span><span class="n">Z</span><span class="p">,</span><span class="n">user_id</span><span class="o">=</span><span class="s">'53f34ce4a29f4c6ebf1d57957af6986a'</span><span class="p">,</span><span class="n">volume_attachment</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">volume_type</span><span class="o">=</span><span class="n">VolumeType</span><span class="p">(</span><span class="mi">5</span><span class="n">c718eb8</span><span class="o">-</span><span class="mi">4556</span><span class="o">-</span><span class="mi">4</span><span class="n">d89</span><span class="o">-</span><span class="mi">9</span><span class="n">edc</span><span class="o">-</span><span class="mi">31738</span><span class="n">cd0c848</span><span class="p">),</span><span class="n">volume_type_id</span><span class="o">=</span><span class="mi">5</span><span class="n">c718eb8</span><span class="o">-</span><span class="mi">4556</span><span class="o">-</span><span class="mi">4</span><span class="n">d89</span><span class="o">-</span><span class="mi">9</span><span class="n">edc</span><span class="o">-</span><span class="mi">31738</span><span class="n">cd0c848</span><span class="p">)</span>
+<span class="n">context</span><span class="o">.</span><span class="n">__dict__</span>
+<span class="p">{</span><span class="s">'domain'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'project_name'</span><span class="p">:</span> <span class="s">u'admin'</span><span class="p">,</span> <span class="s">'project_domain'</span><span class="p">:</span> <span class="s">u'default'</span><span class="p">,</span> <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">921988</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=&lt;</span><span class="n">FixedOffset</span> <span class="s">u'+00:00'</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">&gt;</span><span class="p">),</span> <span class="s">'auth_token'</span><span class="p">:</span> <span class="s">u'gAAAAABYRTvkecCacYonziumD64QPkqMZYcgOcbqu7AP2LbiXNmcEh_VSuHlobemeTofZdbq4coe0wzURI8-8hFz5i1IhWNjrEWnH_mZtFnqGPBcnMO7XvMBvhhxIjyXqNHkcNhrsM8uUA6K2T8nJXEubNKKwzULbVFjcMkVItHYFLKjjI0gZ94'</span><span class="p">,</span> <span class="s">'remote_address'</span><span class="p">:</span> <span class="s">u'10.100.7.17'</span><span class="p">,</span> <span class="s">'quota_class'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'resource_uuid'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'is_admin'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">'user'</span><span class="p">:</span> <span class="s">u'53f34ce4a29f4c6ebf1d57957af6986a'</span><span class="p">,</span> <span class="s">'service_catalog'</span><span class="p">:</span> <span class="p">[{</span><span class="s">u'endpoints'</span><span class="p">:</span> <span class="p">[{</span><span class="s">u'adminURL'</span><span class="p">:</span> <span class="s">u'http://compute.az1.dc1.RegionOne.com:8774/v2/cfa52d30378146cbaabb4670cc6f0786'</span><span class="p">,</span> <span class="s">u'region'</span><span class="p">:</span> <span class="s">u'RegionOne'</span><span class="p">,</span> <span class="s">u'internalURL'</span><span class="p">:</span> <span class="s">u'http://compute.az1.dc1.RegionOne.com:8774/v2/cfa52d30378146cbaabb4670cc6f0786'</span><span class="p">,</span> <span class="s">u'publicURL'</span><span class="p">:</span> <span class="s">u'http://compute.az1.dc1.RegionOne.com:8774/v2/cfa52d30378146cbaabb4670cc6f0786'</span><span class="p">}],</span> <span class="s">u'type'</span><span class="p">:</span> <span class="s">u'compute'</span><span class="p">,</span> <span class="s">u'name'</span><span class="p">:</span> <span class="s">u'nova'</span><span class="p">},</span> <span class="p">{</span><span class="s">u'endpoints'</span><span class="p">:</span> <span class="p">[{</span><span class="s">u'adminURL'</span><span class="p">:</span> <span class="s">u'http://identity.az1.dc1.RegionOne.com:35357/v2.0'</span><span class="p">,</span> <span class="s">u'region'</span><span class="p">:</span> <span class="s">u'RegionOne'</span><span class="p">,</span> <span class="s">u'internalURL'</span><span class="p">:</span> <span class="s">u'http://10.100.7.17/identity'</span><span class="p">,</span> <span class="s">u'publicURL'</span><span class="p">:</span> <span class="s">u'http://10.100.7.17/identity'</span><span class="p">}],</span> <span class="s">u'type'</span><span class="p">:</span> <span class="s">u'identity'</span><span class="p">,</span> <span class="s">u'name'</span><span class="p">:</span> <span class="s">u'keystone'</span><span class="p">},</span> <span class="p">{</span><span class="s">u'endpoints'</span><span class="p">:</span> <span class="p">[{</span><span class="s">u'adminURL'</span><span class="p">:</span> <span class="s">u'http://10.100.7.17:9292'</span><span class="p">,</span> <span class="s">u'region'</span><span class="p">:</span> <span class="s">u'RegionOne'</span><span class="p">,</span> <span class="s">u'internalURL'</span><span class="p">:</span> <span class="s">u'http://image.az1.dc1.RegionOne.com:9292/'</span><span class="p">,</span> <span class="s">u'publicURL'</span><span class="p">:</span> <span class="s">u'http://10.100.7.17:9292'</span><span class="p">}],</span> <span class="s">u'type'</span><span class="p">:</span> <span class="s">u'image'</span><span class="p">,</span> <span class="s">u'name'</span><span class="p">:</span> <span class="s">u'glance'</span><span class="p">}],</span> <span class="s">'tenant'</span><span class="p">:</span> <span class="s">u'cfa52d30378146cbaabb4670cc6f0786'</span><span class="p">,</span> <span class="s">'read_only'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'show_deleted'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'roles'</span><span class="p">:</span> <span class="p">[</span><span class="s">u'admin'</span><span class="p">],</span> <span class="s">'domain_name'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'is_admin_project'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">'_read_deleted'</span><span class="p">:</span> <span class="s">u'no'</span><span class="p">,</span> <span class="s">'request_id'</span><span class="p">:</span> <span class="s">u'req-dd78bc47-ca01-45c0-b789-a204e2cc2a61'</span><span class="p">,</span> <span class="s">'user_domain'</span><span class="p">:</span> <span class="s">u'default'</span><span class="p">,</span> <span class="s">'user_name'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'user_domain_name'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'project_domain_name'</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>
+
+	<span class="err">关键流程如下：</span>
+
+    <span class="err">判断创建类型，根据不同创建类型调用不同的创建方法、</span><span class="n">create_type</span><span class="err">的数据来源于</span><span class="n">volume_spec</span><span class="err">中的“</span><span class="nb">type</span><span class="err">”字段</span>
+    <span class="k">if</span> <span class="n">create_type</span> <span class="o">==</span> <span class="s">'raw'</span><span class="p">:</span>
+        <span class="n">model_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_raw_volume</span><span class="p">(</span><span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">volume_spec</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">create_type</span> <span class="o">==</span> <span class="s">'snap'</span><span class="p">:</span>
+        <span class="n">model_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_from_snapshot</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span>
+                                                  <span class="o">**</span><span class="n">volume_spec</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">create_type</span> <span class="o">==</span> <span class="s">'source_vol'</span><span class="p">:</span>
+        <span class="n">model_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_from_source_volume</span><span class="p">(</span>
+            <span class="n">context</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">volume_spec</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">create_type</span> <span class="o">==</span> <span class="s">'source_replica'</span><span class="p">:</span>
+        <span class="n">model_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_from_source_replica</span><span class="p">(</span>
+            <span class="n">context</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">volume_spec</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">create_type</span> <span class="o">==</span> <span class="s">'image'</span><span class="p">:</span>
+        <span class="n">model_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_from_image</span><span class="p">(</span><span class="n">context</span><span class="p">,</span>
+                                               <span class="n">volume</span><span class="p">,</span>
+                                               <span class="o">**</span><span class="n">volume_spec</span><span class="p">)</span>
+	
+
+
+
+
+
+<span class="err">此处是根据镜像创建，则调用：</span>
+
+<span class="k">def</span> <span class="nf">_create_from_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span>
+			   <span class="n">image_location</span><span class="p">,</span> <span class="n">image_id</span><span class="p">,</span> <span class="n">image_meta</span><span class="p">,</span>
+			   <span class="n">image_service</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="err">其中入参：</span>
+<span class="n">volume</span><span class="err">：</span>
+ <span class="n">Volume</span><span class="p">(</span><span class="n">_name_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">admin_metadata</span><span class="o">=</span><span class="p">{},</span><span class="n">attach_status</span><span class="o">=</span><span class="s">'detached'</span><span class="p">,</span><span class="n">availability_zone</span><span class="o">=</span><span class="s">'nova'</span><span class="p">,</span><span class="n">bootable</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">cluster</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">cluster_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">consistencygroup</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">consistencygroup_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">created_at</span><span class="o">=</span><span class="mi">2016</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mo">05</span><span class="n">T10</span><span class="p">:</span><span class="mo">05</span><span class="p">:</span><span class="mi">25</span><span class="n">Z</span><span class="p">,</span><span class="n">deleted</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">deleted_at</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">display_description</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">display_name</span><span class="o">=</span><span class="s">'zd2'</span><span class="p">,</span><span class="n">ec2_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">encryption_key_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">glance_metadata</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">group</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">group_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">host</span><span class="o">=</span><span class="s">'jenkins@DS01#DS02'</span><span class="p">,</span><span class="nb">id</span><span class="o">=</span><span class="n">eddfec51</span><span class="o">-</span><span class="mi">9</span><span class="n">bc5</span><span class="o">-</span><span class="mi">4649</span><span class="o">-</span><span class="mi">8050</span><span class="o">-</span><span class="mi">96</span><span class="n">ef7b909b30</span><span class="p">,</span><span class="n">launched_at</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">metadata</span><span class="o">=</span><span class="p">{},</span><span class="n">migration_status</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">multiattach</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">previous_status</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">project_id</span><span class="o">=</span><span class="s">'cfa52d30378146cbaabb4670cc6f0786'</span><span class="p">,</span><span class="n">provider_auth</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">provider_geometry</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">provider_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">provider_location</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">replication_driver_data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">replication_extended_status</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">replication_status</span><span class="o">=</span><span class="s">'disabled'</span><span class="p">,</span><span class="n">scheduled_at</span><span class="o">=</span><span class="mi">2016</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mo">05</span><span class="n">T10</span><span class="p">:</span><span class="mo">05</span><span class="p">:</span><span class="mi">25</span><span class="n">Z</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">snapshot_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">snapshots</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">source_volid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">status</span><span class="o">=</span><span class="s">'creating'</span><span class="p">,</span><span class="n">terminated_at</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">updated_at</span><span class="o">=</span><span class="mi">2016</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mo">05</span><span class="n">T10</span><span class="p">:</span><span class="mo">05</span><span class="p">:</span><span class="mi">25</span><span class="n">Z</span><span class="p">,</span><span class="n">user_id</span><span class="o">=</span><span class="s">'53f34ce4a29f4c6ebf1d57957af6986a'</span><span class="p">,</span><span class="n">volume_attachment</span><span class="o">=&lt;</span><span class="err">?</span><span class="o">&gt;</span><span class="p">,</span><span class="n">volume_type</span><span class="o">=</span><span class="n">VolumeType</span><span class="p">(</span><span class="mi">5</span><span class="n">c718eb8</span><span class="o">-</span><span class="mi">4556</span><span class="o">-</span><span class="mi">4</span><span class="n">d89</span><span class="o">-</span><span class="mi">9</span><span class="n">edc</span><span class="o">-</span><span class="mi">31738</span><span class="n">cd0c848</span><span class="p">),</span><span class="n">volume_type_id</span><span class="o">=</span><span class="mi">5</span><span class="n">c718eb8</span><span class="o">-</span><span class="mi">4556</span><span class="o">-</span><span class="mi">4</span><span class="n">d89</span><span class="o">-</span><span class="mi">9</span><span class="n">edc</span><span class="o">-</span><span class="mi">31738</span><span class="n">cd0c848</span><span class="p">)</span>
+
+<span class="n">image_id</span><span class="err">：</span>
+ <span class="s">'801a7b53-1e25-4f49-b0f3-d2dd61a9f388'</span>
+<span class="n">image_location</span><span class="err">：</span>
+ <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+<span class="n">image_meta</span><span class="err">：</span>
+ <span class="p">{</span><span class="s">'status'</span><span class="p">:</span> <span class="s">u'active'</span><span class="p">,</span> <span class="s">'name'</span><span class="p">:</span> <span class="s">u'VSA'</span><span class="p">,</span> <span class="s">'deleted'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'container_format'</span><span class="p">:</span> <span class="s">u'bare'</span><span class="p">,</span> <span class="s">'created_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=&lt;</span><span class="n">iso8601</span><span class="o">.</span><span class="n">Utc</span><span class="o">&gt;</span><span class="p">),</span> <span class="s">'disk_format'</span><span class="p">:</span> <span class="s">u'vhd'</span><span class="p">,</span> <span class="s">'updated_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=&lt;</span><span class="n">iso8601</span><span class="o">.</span><span class="n">Utc</span><span class="o">&gt;</span><span class="p">),</span> <span class="s">'id'</span><span class="p">:</span> <span class="s">u'801a7b53-1e25-4f49-b0f3-d2dd61a9f388'</span><span class="p">,</span> <span class="s">'owner'</span><span class="p">:</span> <span class="s">u'cfa52d30378146cbaabb4670cc6f0786'</span><span class="p">,</span> <span class="s">'protected'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span> <span class="s">'min_ram'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'checksum'</span><span class="p">:</span> <span class="s">u'99396230fb8b6617b8784173ac3d0727'</span><span class="p">,</span> <span class="s">'min_disk'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'is_public'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span> <span class="s">'deleted_at'</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="s">'properties'</span><span class="p">:</span> <span class="p">{</span><span class="s">u'os-type'</span><span class="p">:</span> <span class="s">u'Linux'</span><span class="p">,</span> <span class="s">u'os_distro'</span><span class="p">:</span> <span class="s">u'Novell SUSE Linux Enterprise Server 11 SP3 64bit'</span><span class="p">,</span> <span class="s">u'os_type'</span><span class="p">:</span> <span class="s">u'Linux'</span><span class="p">},</span> <span class="s">'size'</span><span class="p">:</span> <span class="mi">787726336</span><span class="p">}</span>
+<span class="n">image_service</span><span class="err">：</span>
+ <span class="o">&lt;</span><span class="n">cinder</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">glance</span><span class="o">.</span><span class="n">GlanceImageService</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7f6d37f6a710</span><span class="o">&gt;</span>
+<span class="n">kwargs</span><span class="err">：</span>
+ <span class="p">{</span><span class="s">'status'</span><span class="p">:</span> <span class="s">u'creating'</span><span class="p">,</span> <span class="s">'volume_size'</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s">'volume_name'</span><span class="p">:</span> <span class="s">'volume-eddfec51-9bc5-4649-8050-96ef7b909b30'</span><span class="p">}</span>
+
+
+
+
+<span class="err">重要流程调用（一）：</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">volume_is_encrypted</span><span class="p">:</span>
+<span class="n">model_update</span><span class="p">,</span> <span class="n">cloned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">clone_image</span><span class="p">(</span><span class="n">context</span><span class="p">,</span>
+					       <span class="n">volume</span><span class="p">,</span>
+					       <span class="n">image_location</span><span class="p">,</span>
+					       <span class="n">image_meta</span><span class="p">,</span>
+					       <span class="n">image_service</span><span class="p">)</span>
+<span class="err">此处调用</span><span class="n">cinder</span><span class="err">的南向插件，创建磁盘。创建完成后：</span>
+<span class="n">model_update</span><span class="err">：</span>
+<span class="n">cloned</span><span class="err">：</span><span class="bp">False</span>
+
+<span class="err">重要流程调用（二）：</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">cloned</span> <span class="ow">and</span> <span class="s">'cinder'</span> <span class="ow">in</span> <span class="n">CONF</span><span class="o">.</span><span class="n">allowed_direct_url_schemes</span><span class="p">:</span>
+<span class="n">model_update</span><span class="p">,</span> <span class="n">cloned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clone_image_volume</span><span class="p">(</span><span class="n">context</span><span class="p">,</span>
+						<span class="n">volume</span><span class="p">,</span>
+						<span class="n">image_location</span><span class="p">,</span>
+						<span class="n">image_meta</span><span class="p">)</span>
+
+<span class="n">CONF</span><span class="o">.</span><span class="n">allowed_direct_url_schemes</span>  <span class="err">表示“</span><span class="n">A</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">url</span> <span class="n">scheme</span> <span class="n">that</span> <span class="n">can</span> <span class="n">be</span> <span class="n">downloaded</span> <span class="n">directly</span> <span class="n">via</span> <span class="n">the</span> <span class="n">direct_url</span><span class="o">.</span>  <span class="n">Currently</span> <span class="n">supported</span> <span class="n">schemes</span><span class="p">:</span> <span class="p">[</span><span class="nb">file</span><span class="p">]</span><span class="err">”</span>
+<span class="err">此处表示如果非</span><span class="n">cloned</span><span class="err">并且</span><span class="n">cinder</span><span class="err">可以直接从</span><span class="n">glance</span><span class="err">后端下载镜像，则直接调用</span><span class="n">_clone_image_volue</span><span class="err">方法。</span>
+
+
+<span class="err">重要流程调用（三）：</span>
+<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_volume_cache</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">cloned</span><span class="p">:</span>
+<span class="n">internal_context</span> <span class="o">=</span> <span class="n">cinder_context</span><span class="o">.</span><span class="n">get_internal_tenant_context</span><span class="p">()</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">internal_context</span><span class="p">:</span>
+    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_LI</span><span class="p">(</span><span class="s">'Unable to get Cinder internal context, will '</span>
+		 <span class="s">'not use image-volume cache.'</span><span class="p">))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">model_update</span><span class="p">,</span> <span class="n">cloned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_from_image_cache</span><span class="p">(</span>
+	<span class="n">context</span><span class="p">,</span>
+	<span class="n">internal_context</span><span class="p">,</span>
+	<span class="n">volume</span><span class="p">,</span>
+	<span class="n">image_id</span><span class="p">,</span>
+	<span class="n">image_meta</span>
+    <span class="p">)</span>
+
+
+
+<span class="err">重要流程调用（四）：</span>
+<span class="k">with</span> <span class="n">image_utils</span><span class="o">.</span><span class="n">TemporaryImages</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span>
+    <span class="n">image_service</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">image_id</span><span class="p">)</span> <span class="k">as</span> <span class="n">tmp_image</span><span class="p">:</span>
+
+<span class="c"># Try to create the volume as the minimal size, then we can</span>
+<span class="c"># extend once the image has been downloaded.</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">image_utils</span><span class="o">.</span><span class="n">qemu_img_info</span><span class="p">(</span><span class="n">tmp_image</span><span class="p">)</span>
+
+<span class="n">virtual_size</span> <span class="o">=</span> <span class="n">image_utils</span><span class="o">.</span><span class="n">check_virtual_size</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">virtual_size</span><span class="p">,</span> <span class="n">volume</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">image_id</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">should_create_cache_entry</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">virtual_size</span> <span class="ow">and</span> <span class="n">virtual_size</span> <span class="o">!=</span> <span class="n">original_size</span><span class="p">:</span>
+	<span class="n">volume</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">virtual_size</span>
+	<span class="n">volume</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+	<span class="n">model_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_from_image_download</span><span class="p">(</span>
+				<span class="n">context</span><span class="p">,</span>
+				<span class="n">volume</span><span class="p">,</span>
+				<span class="n">image_location</span><span class="p">,</span>
+				<span class="n">image_id</span><span class="p">,</span>
+				<span class="n">image_service</span>
+			    <span class="p">)</span>
+
+<span class="err">之后调用如下方法，主要完成两部分内容：</span>
+<span class="mi">1</span><span class="err">、调用插件借口创建磁盘</span><span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">create_volume</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span><span class="err">，返回</span><span class="n">model_update</span><span class="err">内容为：</span>
+						<span class="n">model_update</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">create_volume</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+
+ <span class="p">{</span><span class="s">'provider_location'</span><span class="p">:</span> <span class="s">u'addr=10.100.0.6:7443,uri=/service/sites/3800067A/volumes/528,urn=urn:sites:3800067A:volumes:528,datastoreUrn=urn:sites:3800067A:datastores:3,isThin=True,storageType=LOCALPOME,type=normal'</span><span class="p">}</span>
+
+<span class="mi">2</span><span class="err">、更新数据库中磁盘创建状态为</span> <span class="n">downloading</span>
+						<span class="n">model_update</span><span class="p">[</span><span class="s">'status'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'downloading'</span>
+<span class="mi">3</span><span class="err">、调用</span><span class="n">driver</span><span class="err">的</span><span class="n">copy_image_to_volume</span><span class="err">接口，镜像拷贝卷。</span>			
+						<span class="bp">self</span><span class="o">.</span><span class="n">_copy_image_to_volume</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="n">image_id</span><span class="p">,</span> <span class="n">image_location</span><span class="p">,</span><span class="n">image_service</span><span class="p">)</span>
+
+
+
+<span class="err">重要流程调用（五）：</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">_handle_bootable_volume_glance_meta</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span>
+						 <span class="n">image_id</span><span class="o">=</span><span class="n">image_id</span><span class="p">,</span>
+						 <span class="n">image_meta</span><span class="o">=</span><span class="n">image_meta</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">cloned</span> <span class="ow">and</span> <span class="s">'cinder'</span> <span class="ow">in</span> <span class="n">CONF</span><span class="o">.</span><span class="n">allowed_direct_url_schemes</span><span class="p">:</span>
+    <span class="n">model_update</span><span class="p">,</span> <span class="n">cloned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clone_image_volume</span><span class="p">(</span><span class="n">context</span><span class="p">,</span>
+						    <span class="n">volume</span><span class="p">,</span>
+						    <span class="n">image_location</span><span class="p">,</span>
+						    <span class="n">image_meta</span><span class="p">)</span>
+
+
+
+	
+</code></pre></div></div>
+
+        <div id="disqus_container">
+            <class="comment"/>
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//mukosame.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        
+        </div>
+   </div>
+   
+    <div class="sidenav">
+        <h2>技术</h2>
+        <ul class="artical-list">
+        
+            <li><a href="/centos7-lvm%E6%89%A9%E5%A4%A7lv">LVM扩大LV</a></li>
+        
+            <li><a href="/lvm%E6%89%A9%E5%A4%A7lv">LVM扩大LV</a></li>
+        
+            <li><a href="/%E5%AF%B9%E7%AD%89%E8%BF%9E%E6%8E%A5">对等连接</a></li>
+        
+            <li><a href="/%E5%BC%B9%E6%80%A7%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1">弹性负载均衡</a></li>
+        
+            <li><a href="/NAT%E7%BD%91%E5%85%B3">NAT网关</a></li>
+        
+            <li><a href="/CAS%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95%E5%AE%9E%E8%B7%B5">CAS单点登录实践</a></li>
+        
+            <li><a href="/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E7%89%A9%E6%96%99%E4%BF%A1%E6%81%AF">实验室物料信息</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E5%9B%9B-nova-%E7%BB%99%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%B7%BB%E5%8A%A0%E5%88%A0%E9%99%A4%E7%BD%91%E5%8D%A1">【OpenStack实践系列 四 】nova 给虚拟机添加删除网卡</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%BA%94-nova-%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%9B%98%E8%99%9A%E6%8B%9F%E6%9C%BA">【OpenStack实践系列 五 】nova 创建多盘虚拟机</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%B8%89-nova-%E7%BB%99%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98">【OpenStack实践系列 三 】nova 给虚拟机挂载磁盘</a></li>
+        
+            <li><a href="/python-taskflow">taskflow</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%BA%8C-nova-%E5%90%AF%E5%8A%A8%E5%8D%B7%E5%90%AF%E5%8A%A8%E8%99%9A%E6%8B%9F%E6%9C%BA">【OpenStack操作系列 二 】 nova 启动卷启动虚拟机</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%B8%80-cinder%E5%88%9B%E5%BB%BAtype-volume-type-%E4%BB%A5%E5%8F%8Atype%E7%9A%84%E4%BD%BF%E7%94%A8">【OpenStacks实践系列 一 】cinder创建type（volume-type）以及type的使用</a></li>
+        
+            <li><a href="/Cinder%E4%BB%A3%E7%A0%81%E8%B5%B0%E8%AF%BB%E7%B3%BB%E5%88%97%E4%B8%80-%E5%88%9B%E5%BB%BA%E7%A3%81%E7%9B%98-%E4%BA%8C-cinder-volume">【OpenStack源码单排 一】创建磁盘 create_volume.py走读</a></li>
+        
+            <li><a href="/Cinder%E4%BB%A3%E7%A0%81%E8%B5%B0%E8%AF%BB%E7%B3%BB%E5%88%97%E4%B8%80-%E5%88%9B%E5%BB%BA%E7%A3%81%E7%9B%98-%E4%B8%80-cinder-api">【OpenStack源码单排 一】cinder创建磁盘总述（一）</a></li>
+        
+            <li><a href="/python-%E5%85%83%E7%B1%BB">python - 元类</a></li>
+        
+            <li><a href="/python-with%E8%AF%AD%E5%8F%A5">python with语句</a></li>
+        
+            <li><a href="/git%E5%B8%B8%E8%A7%81%E6%93%8D%E4%BD%9C%E5%A4%87%E5%BF%98">git常用操作备忘</a></li>
+        
+            <li><a href="/%E8%A7%A3%E5%86%B3suse%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%B2%A1%E6%9C%89message%E6%97%A5%E5%BF%97%E7%9A%84%E9%97%AE%E9%A2%98">解决suse操作系统没有message日志的问题</a></li>
+        
+            <li><a href="/pep8%E8%A7%84%E8%8C%83%E9%97%AE%E9%A2%98%E4%BF%AE%E6%94%B9">pep8规范问题修改</a></li>
+        
+            <li><a href="/devstack%E4%B8%ADscreen%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93">devstack中screen使用小结</a></li>
+        
+            <li><a href="/OpenStack%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E4%B8%8B%E5%88%9B%E5%BB%BAgit%E4%BB%A3%E7%A0%81%E5%BA%93">OpenStack命名空间下创建git代码库</a></li>
+        
+            <li><a href="/%E9%9A%8F%E7%AC%94%E7%A2%8E%E7%A2%8E%E5%BF%B5">随笔碎碎念</a></li>
+        
+            <li><a href="/android%E9%9B%B6%E6%95%A3%E7%9F%A5%E8%AF%86">android零散知识</a></li>
+        
+            <li><a href="/Volume%E5%AE%9E%E8%B7%B5">volume实践</a></li>
+        
+            <li><a href="/neutron%E4%B9%8Bnetwork">neutron之network初探</a></li>
+        
+            <li><a href="/openstack%E5%AE%9E%E8%B7%B5%E4%B9%8Bdevstack">OpenStack实践之devstack</a></li>
+        
+            <li><a href="/Docker%E5%85%AC%E5%BC%80%E8%AF%BE">虚拟三层路由转发</a></li>
+        
+            <li><a href="/%E4%B8%BB%E6%9C%BA%E7%BB%84-host-aggregate">主机组（host aggregate）</a></li>
+        
+            <li><a href="/Nova%E4%B9%8B%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E4%BB%A5%E5%8F%8AREST%E8%B5%84%E6%BA%90%E8%B7%AF%E7%94%B1">Nova API之进程启动以及REST资源路由</a></li>
+        
+            <li><a href="/Nova-API%E4%B9%8B%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E4%BB%A5%E5%8F%8AREST%E8%B5%84%E6%BA%90%E8%B7%AF%E7%94%B1">Nova之进程启动以及REST资源路由</a></li>
+        
+            <li><a href="/Nova%E4%B9%8Bapi-paste.ini%E7%AC%94%E8%AE%B0">Nova之api-paste.ini笔记</a></li>
+        
+            <li><a href="/Linux-Bridge">Linux Bridge</a></li>
+        
+            <li><a href="/HTML%E4%B8%8ECSS">HTML与CSS</a></li>
+        
+            <li><a href="/Jekyll%E5%87%BA%E5%8F%91%E5%AD%A6WEB">Jekyll出发学WEB</a></li>
+        
+            <li><a href="/WSGI%E5%88%9D%E6%8E%A2">WSGI初探</a></li>
+        
+        </ul>
+
+        <h2>随笔</h2>
+        <ul class="artical-list">
+        
+        </ul>
+
+        <h2>关于我</h2>
+        <ul class="artical-list">
+        
+        </ul>
+    </div>
+</div>
+
+<script src="/js/post.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function(){
+            $('.home-follow').click(function(e){
+                e.preventDefault();
+
+                if($('.home-contact').is(':visible')){
+                    $('.home-contact').slideUp(100);
+                }else{
+                    $('.home-contact').slideDown(100);
+                }
+            });
+        })
+    </script>
+</body>
+</html>

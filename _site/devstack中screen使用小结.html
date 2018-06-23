@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    * Author:         BeiYuu
+    * Revised:        Mukosame
+    -->
+    <meta charset="utf-8" />
+    <title>devstack中screen使用小结 | 技术与生活-支冬的个人博客</title>
+    <meta name="author" content="支冬" />
+    <meta name="renderer" content="webkit">
+    <meta name="description" content="技术与生活" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/default.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="alternate" type="application/atom+xml" title="Recent Entries" href="/atom.xml" />
+    <link rel="alternatecss" type="application/rss+xml" title="“Dong Zhi's Blog”" href="http://localhost:4000/feed.xml">
+    <script src="/js/jquery-1.7.1.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <div class="home-menu">
+        <div class="home-icon-con">
+            <a class="home-menu-icon" href="/">博客首页</a>
+            <a class="home-follow" href="#" title="联系我">+</a>
+        </div>
+        <div class="home-contact">
+            <a href="/MyWeiXin.JPG" target="_blank" style="margin-left:-5px;"><img src="/weixin.ico" alt="" width="22"/></a>
+            <a href="https://www.linkedin.com/in/%E5%86%AC-%E6%94%AF-b86453145/" target="_blank" style="text-align:center;"><img src="/Linkin.ico" alt="" width="22"/></a>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="/js/prettify/prettify.css" />
+<style type="text/css">
+    body { background:#e8e8e8; }
+    @media screen and (max-width: 750px){
+        body { background:#fff; }
+    }
+    @media screen and (max-width: 1020px){
+        body { background:#fff; }
+    }
+</style>
+
+<div id="content">
+    <div class="entry">
+        <h1 class="entry-title"><a href="/devstack%E4%B8%ADscreen%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93" title="devstack中screen使用小结">devstack中screen使用小结</a></h1>
+        <p class="entry-date">2016-10-14</p>
+        <h2 id="一screen--r-stack不成功">一、<code class="highlighter-rouge">screen -r stack</code>不成功</h2>
+<p><img src="http://i.imgur.com/iNRBxiv.jpg" alt="" />
+screen -list：查看当前用户开启的所有screen
+此时看到已经有个screen开着，stack正在连接使用，所以此时再用screen -r stack连接，就会
+    <code class="highlighter-rouge">There is no screen to be resumed matching stack</code></p>
+
+<p>此时需要先将已经连接的screen detach掉。执行：<code class="highlighter-rouge">screen -d stack</code>。即可切断原有连接。
+再次执行<code class="highlighter-rouge">screen -r stack</code>，就能连接上了。报错：</p>
+
+<p>##二、在screen视图下切换窗口 
+移到下一个window：<code class="highlighter-rouge">CRTL + A + n</code></p>
+
+<p>移到前一个window：<code class="highlighter-rouge">CRTL + A + p</code></p>
+
+<h2 id="三screen-cannot-open-your-terminal-devpts1问题">三、screen Cannot open your terminal ‘/dev/pts/1’问题</h2>
+
+<p>如下内容转自：http://blog.sina.com.cn/s/blog_704836f401010osn.html</p>
+
+<p>问题描述:</p>
+
+<p><code class="highlighter-rouge"> userA</code>首先登录系统，使用<code class="highlighter-rouge">screen</code>开启了一个<code class="highlighter-rouge">session</code>，然后<code class="highlighter-rouge">detach</code>这个窗口。</p>
+
+<p><code class="highlighter-rouge">userB</code>然后登录系统，通过<code class="highlighter-rouge">su - userA</code> 变成<code class="highlighter-rouge">userA</code>，然后使用<code class="highlighter-rouge">screen -r</code> 恢复之前<code class="highlighter-rouge">detached</code>窗口，这时系统报如下错误:</p>
+
+<p><code class="highlighter-rouge">*Cannot open your terminal '/dev/pts/1' - please check.*</code></p>
+
+<p>解决方法:</p>
+
+<p><code class="highlighter-rouge">userB</code>在<code class="highlighter-rouge"> su - userA</code>以后，执行如下命令即可:</p>
+
+<p><code class="highlighter-rouge"> script /dev/null</code></p>
+
+<p>注意: 有人提到 <code class="highlighter-rouge">chmod 777 /dev/pts/1</code>，这么干的人真是误人子弟，虽然这么做的确能解决这个问题，但是会带来极大的安全问题！！！</p>
+
+<p>为什么这条命令能解决问题?</p>
+
+<p>一般人看到上面这里估计就马上回去试验了，但是，等等，你不想知道为什么这个命令会有作用吗？它是怎么起作用的呢？</p>
+
+<p>我们来过一遍整个的操作步骤:</p>
+
+<p>首先，<code class="highlighter-rouge">usera</code>登录到系统中，我们使用tty命令查看一下分配给他的<code class="highlighter-rouge">tty</code>，然后看一下这个<code class="highlighter-rouge">tty</code>的权限，然后用户执行<code class="highlighter-rouge">screen</code>命令。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>usera@localhost ~ $ ssh usera@remotehost
+usera@remotehost ~ $ tty
+/dev/pts/1
+usera@remotehost ~ $ ls -l /dev/pts/1
+crw--w---- 1 usera tty 136, 1 2011-01-09 20:14 /dev/pts/1
+usera@remotehost ~ $ screen
+</code></pre></div></div>
+
+<p>我们观察上边的输出，发现<code class="highlighter-rouge">usera</code>对于<code class="highlighter-rouge">/dev/pts/1</code>具有读写权限，它所在组成员对这个tty具有写权限，其他用户不能访问这个<code class="highlighter-rouge">tty</code>。</p>
+
+<p>然后，userb也登录到系统中，同样我们使用tty命令查看一下分配给他的tty，然后看一下这个<code class="highlighter-rouge">tty</code>的权限</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>userb@localhost ~ $ ssh userb@remotehost
+userb@remotehost ~ $ tty
+/dev/pts/2
+userb@remotehost ~ $ ls -l /dev/pts/2
+crw--w---- 1 userb tty 136, 2 2011-01-09 20:20 /dev/pts/2
+</code></pre></div></div>
+
+<p>观察输出，userb被分配了<code class="highlighter-rouge">/dev/pts/2</code>，也是对于<code class="highlighter-rouge">/dev/pts/2</code>具有读写权限，它所在组成员对这个<code class="highlighter-rouge">tty</code>具有写权限，其他用户不能访问这个<code class="highlighter-rouge">tty</code>。</p>
+
+<p>然后<code class="highlighter-rouge">userb</code>通过<code class="highlighter-rouge">su - usera</code>命令变成<code class="highlighter-rouge">usera</code>，同样我们使用<code class="highlighter-rouge">tty</code>命令查看一下分配给他的<code class="highlighter-rouge">tty</code>，然后看一下这个<code class="highlighter-rouge">tty</code>的权限</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>userb@remotehost ~ $ sudo su - usera
+[sudo] password for userb:
+usera@remotehost ~ $ tty
+/dev/pts/2
+usera@remotehost ~ $ ls -l /dev/pts/2
+crw--w---- 1 userb tty 136, 2 2011-01-09 20:20 /dev/pts/2
+</code></pre></div></div>
+
+<p>AHA!!  注意了，我们看到虽然<code class="highlighter-rouge">userb</code>已经变成了<code class="highlighter-rouge">usera</code>，但是他所使用的<code class="highlighter-rouge">tty</code>并没有改变，仍然是<code class="highlighter-rouge">/dev/pts/2</code>。这就是为什么执行<code class="highlighter-rouge">screen</code>命令会报错的原因了，因为所有命令此时是使用<code class="highlighter-rouge">usera</code>帐户执行的，但是<code class="highlighter-rouge">/dev/pts/2</code>的读写权限属于<code class="highlighter-rouge">userb</code>，所以所有试图控制<code class="highlighter-rouge">/dev/pts/2</code>的访问都被拒绝了！</p>
+
+<p>那么我们接下来看一下 <code class="highlighter-rouge">script /dev/null</code>做了些什么，使得<code class="highlighter-rouge">screen</code>命令能执行呢？</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>usera@remotehost ~ $ script /dev/null
+Script started, file is /dev/null
+usera@remotehost ~ $ tty
+/dev/pts/3
+usera@remotehost ~ $ ls -l /dev/pts/3
+crw--w---- 1 usera tty 136, 3 2011-01-09 20:36 /dev/pts/3
+</code></pre></div></div>
+
+<p>AHA!!! 看到了吗？我们实际上是得到了一个新的<code class="highlighter-rouge">tty ---&gt; /dev/pts/3</code>，因此<code class="highlighter-rouge">screen</code>命令能够执行了，因为<code class="highlighter-rouge"> /dev/pts/3</code>这个<code class="highlighter-rouge">tty</code>的所有者是<code class="highlighter-rouge">usera</code>！</p>
+
+        <div id="disqus_container">
+            <class="comment"/>
+<div id="disqus_thread"></div>
+<script>
+    /**
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+    /*
+    var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() {  // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        
+        s.src = '//mukosame.disqus.com/embed.js';
+        
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+        
+        </div>
+   </div>
+   
+    <div class="sidenav">
+        <h2>技术</h2>
+        <ul class="artical-list">
+        
+            <li><a href="/centos7-lvm%E6%89%A9%E5%A4%A7lv">LVM扩大LV</a></li>
+        
+            <li><a href="/lvm%E6%89%A9%E5%A4%A7lv">LVM扩大LV</a></li>
+        
+            <li><a href="/%E5%AF%B9%E7%AD%89%E8%BF%9E%E6%8E%A5">对等连接</a></li>
+        
+            <li><a href="/%E5%BC%B9%E6%80%A7%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1">弹性负载均衡</a></li>
+        
+            <li><a href="/NAT%E7%BD%91%E5%85%B3">NAT网关</a></li>
+        
+            <li><a href="/CAS%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95%E5%AE%9E%E8%B7%B5">CAS单点登录实践</a></li>
+        
+            <li><a href="/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E7%89%A9%E6%96%99%E4%BF%A1%E6%81%AF">实验室物料信息</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E5%9B%9B-nova-%E7%BB%99%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%B7%BB%E5%8A%A0%E5%88%A0%E9%99%A4%E7%BD%91%E5%8D%A1">【OpenStack实践系列 四 】nova 给虚拟机添加删除网卡</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%BA%94-nova-%E5%88%9B%E5%BB%BA%E5%A4%9A%E7%9B%98%E8%99%9A%E6%8B%9F%E6%9C%BA">【OpenStack实践系列 五 】nova 创建多盘虚拟机</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%B8%89-nova-%E7%BB%99%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98">【OpenStack实践系列 三 】nova 给虚拟机挂载磁盘</a></li>
+        
+            <li><a href="/python-taskflow">taskflow</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%BA%8C-nova-%E5%90%AF%E5%8A%A8%E5%8D%B7%E5%90%AF%E5%8A%A8%E8%99%9A%E6%8B%9F%E6%9C%BA">【OpenStack操作系列 二 】 nova 启动卷启动虚拟机</a></li>
+        
+            <li><a href="/OpenStack%E6%93%8D%E4%BD%9C%E7%B3%BB%E5%88%97%E4%B8%80-cinder%E5%88%9B%E5%BB%BAtype-volume-type-%E4%BB%A5%E5%8F%8Atype%E7%9A%84%E4%BD%BF%E7%94%A8">【OpenStacks实践系列 一 】cinder创建type（volume-type）以及type的使用</a></li>
+        
+            <li><a href="/Cinder%E4%BB%A3%E7%A0%81%E8%B5%B0%E8%AF%BB%E7%B3%BB%E5%88%97%E4%B8%80-%E5%88%9B%E5%BB%BA%E7%A3%81%E7%9B%98-%E4%BA%8C-cinder-volume">【OpenStack源码单排 一】创建磁盘 create_volume.py走读</a></li>
+        
+            <li><a href="/Cinder%E4%BB%A3%E7%A0%81%E8%B5%B0%E8%AF%BB%E7%B3%BB%E5%88%97%E4%B8%80-%E5%88%9B%E5%BB%BA%E7%A3%81%E7%9B%98-%E4%B8%80-cinder-api">【OpenStack源码单排 一】cinder创建磁盘总述（一）</a></li>
+        
+            <li><a href="/python-%E5%85%83%E7%B1%BB">python - 元类</a></li>
+        
+            <li><a href="/python-with%E8%AF%AD%E5%8F%A5">python with语句</a></li>
+        
+            <li><a href="/git%E5%B8%B8%E8%A7%81%E6%93%8D%E4%BD%9C%E5%A4%87%E5%BF%98">git常用操作备忘</a></li>
+        
+            <li><a href="/%E8%A7%A3%E5%86%B3suse%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%B2%A1%E6%9C%89message%E6%97%A5%E5%BF%97%E7%9A%84%E9%97%AE%E9%A2%98">解决suse操作系统没有message日志的问题</a></li>
+        
+            <li><a href="/pep8%E8%A7%84%E8%8C%83%E9%97%AE%E9%A2%98%E4%BF%AE%E6%94%B9">pep8规范问题修改</a></li>
+        
+            <li><a href="/devstack%E4%B8%ADscreen%E4%BD%BF%E7%94%A8%E5%B0%8F%E7%BB%93">devstack中screen使用小结</a></li>
+        
+            <li><a href="/OpenStack%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E4%B8%8B%E5%88%9B%E5%BB%BAgit%E4%BB%A3%E7%A0%81%E5%BA%93">OpenStack命名空间下创建git代码库</a></li>
+        
+            <li><a href="/%E9%9A%8F%E7%AC%94%E7%A2%8E%E7%A2%8E%E5%BF%B5">随笔碎碎念</a></li>
+        
+            <li><a href="/android%E9%9B%B6%E6%95%A3%E7%9F%A5%E8%AF%86">android零散知识</a></li>
+        
+            <li><a href="/Volume%E5%AE%9E%E8%B7%B5">volume实践</a></li>
+        
+            <li><a href="/neutron%E4%B9%8Bnetwork">neutron之network初探</a></li>
+        
+            <li><a href="/openstack%E5%AE%9E%E8%B7%B5%E4%B9%8Bdevstack">OpenStack实践之devstack</a></li>
+        
+            <li><a href="/Docker%E5%85%AC%E5%BC%80%E8%AF%BE">虚拟三层路由转发</a></li>
+        
+            <li><a href="/%E4%B8%BB%E6%9C%BA%E7%BB%84-host-aggregate">主机组（host aggregate）</a></li>
+        
+            <li><a href="/Nova%E4%B9%8B%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E4%BB%A5%E5%8F%8AREST%E8%B5%84%E6%BA%90%E8%B7%AF%E7%94%B1">Nova API之进程启动以及REST资源路由</a></li>
+        
+            <li><a href="/Nova-API%E4%B9%8B%E8%BF%9B%E7%A8%8B%E5%90%AF%E5%8A%A8%E4%BB%A5%E5%8F%8AREST%E8%B5%84%E6%BA%90%E8%B7%AF%E7%94%B1">Nova之进程启动以及REST资源路由</a></li>
+        
+            <li><a href="/Nova%E4%B9%8Bapi-paste.ini%E7%AC%94%E8%AE%B0">Nova之api-paste.ini笔记</a></li>
+        
+            <li><a href="/Linux-Bridge">Linux Bridge</a></li>
+        
+            <li><a href="/HTML%E4%B8%8ECSS">HTML与CSS</a></li>
+        
+            <li><a href="/Jekyll%E5%87%BA%E5%8F%91%E5%AD%A6WEB">Jekyll出发学WEB</a></li>
+        
+            <li><a href="/WSGI%E5%88%9D%E6%8E%A2">WSGI初探</a></li>
+        
+        </ul>
+
+        <h2>随笔</h2>
+        <ul class="artical-list">
+        
+        </ul>
+
+        <h2>关于我</h2>
+        <ul class="artical-list">
+        
+        </ul>
+    </div>
+</div>
+
+<script src="/js/post.js" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(function(){
+            $('.home-follow').click(function(e){
+                e.preventDefault();
+
+                if($('.home-contact').is(':visible')){
+                    $('.home-contact').slideUp(100);
+                }else{
+                    $('.home-contact').slideDown(100);
+                }
+            });
+        })
+    </script>
+</body>
+</html>
