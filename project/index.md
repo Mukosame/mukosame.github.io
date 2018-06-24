@@ -12,12 +12,10 @@ layout: home
 
         <ul class="artical-list">
         {% for post in site.categories.project limit:1 %}
-          {{post.content}}
             <li>
                 <h2>
-                    <a href="{{ post.url }}">{{ post.title }}</a>
+                {{post.content}}
                 </h2>
-                <div class="title-desc">{{ post.description }}</div>
             </li>
         {% endfor %}
         </ul>
