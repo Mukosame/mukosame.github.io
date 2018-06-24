@@ -11,17 +11,6 @@ layout: home
         </ul>
 
         <div class="cate-bar"><span id="cateBar"></span></div>
-        <div class='content'>
-        <section class='post'>
-              <h1>关于作者</h1>
-              <h2 id="个人信息"><a href="#个人信息" class="headerlink" title="个人信息"></a>个人信息</h2><p>blackshh </p>
-              <h2 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h2><p>Email：</p>
-              <h2 id="学习经历"><a href="#学习经历" class="headerlink" title="学习经历"></a>学习经历</h2><p></p>
-            </section>
-        </div>
-
-
-
 
         <ul class="artical-list">
         {% for post in site.categories.project %}
