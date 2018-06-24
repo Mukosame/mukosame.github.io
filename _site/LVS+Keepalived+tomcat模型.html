@@ -6,7 +6,7 @@
     * Revised:        Mukosame
     -->
     <meta charset="utf-8" />
-    <title>LVM扩大LV | 技术与生活-支冬的个人博客</title>
+    <title>LVS+Keepalived+tomcat配置示例 | 技术与生活-支冬的个人博客</title>
     <meta name="author" content="支冬" />
     <meta name="renderer" content="webkit">
     <meta name="description" content="技术与生活" />
@@ -43,9 +43,105 @@
 
 <div id="content">
     <div class="entry">
-        <h1 class="entry-title"><a href="/centos7-lvm%E6%89%A9%E5%A4%A7lv" title="LVM扩大LV">LVM扩大LV</a></h1>
-        <p class="entry-date">2018-06-23</p>
-        
+        <h1 class="entry-title"><a href="/LVS+Keepalived+tomcat%E6%A8%A1%E5%9E%8B" title="LVS+Keepalived+tomcat配置示例">LVS+Keepalived+tomcat配置示例</a></h1>
+        <p class="entry-date">2018-06-12</p>
+        <p>前提： <br />
+已安装lvsadm   <br />
+已安装keepalived <br />
+已关闭selinux防火墙 <br />
+已安装tomcat并安装webapp</p>
+
+<p>单虚拟机   <br />
+配置eth0:0,ip地址100.112.76.193  <br />
+eth0的IP地址100.112.76.192</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">[</span>root@kwep000100059 ~]# ifconfig
+eth0: <span class="nv">flags</span><span class="o">=</span>4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 100.112.76.192  netmask 255.255.254.0  broadcast 100.112.77.255
+        inet6 fe80::2a6e:d4ff:fe89:3c1c  prefixlen 64  scopeid 0x20&lt;<span class="nb">link</span><span class="o">&gt;</span>
+        ether 28:6e:d4:89:3c:1c  txqueuelen 1000  <span class="o">(</span>Ethernet<span class="o">)</span>
+        RX packets 2829  bytes 178325 <span class="o">(</span>174.1 KiB<span class="o">)</span>
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 1522  bytes 251253 <span class="o">(</span>245.3 KiB<span class="o">)</span>
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+eth0:0: <span class="nv">flags</span><span class="o">=</span>4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 100.112.76.193  netmask 255.255.255.0  broadcast 100.112.76.255
+        ether 28:6e:d4:89:3c:1c  txqueuelen 1000  <span class="o">(</span>Ethernet<span class="o">)</span>
+
+lo: <span class="nv">flags</span><span class="o">=</span>73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;
+        loop  txqueuelen 0  <span class="o">(</span>Local Loopback<span class="o">)</span>
+        RX packets 765  bytes 118568 <span class="o">(</span>115.7 KiB<span class="o">)</span>
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 765  bytes 118568 <span class="o">(</span>115.7 KiB<span class="o">)</span>
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+virbr0: <span class="nv">flags</span><span class="o">=</span>4099&lt;UP,BROADCAST,MULTICAST&gt;  mtu 1500
+        inet 192.168.122.1  netmask 255.255.255.0  broadcast 192.168.122.255
+        ether 52:54:00:c2:a7:45  txqueuelen 0  <span class="o">(</span>Ethernet<span class="o">)</span>
+        RX packets 0  bytes 0 <span class="o">(</span>0.0 B<span class="o">)</span>
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 <span class="o">(</span>0.0 B<span class="o">)</span>
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+</code></pre></div></div>
+
+<p>keepalived配置</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!</span> Configuration File <span class="k">for </span>keepalived
+
+global_defs <span class="o">{</span>
+   router_id LVS_DEVEL
+<span class="o">}</span>
+
+vrrp_instance VI_1 <span class="o">{</span>
+    state MASTER
+    interface eth0
+    virtual_router_id 51
+    priority 101
+    advert_int 1
+    authentication <span class="o">{</span>
+        auth_type PASS
+        auth_pass 1111
+    <span class="o">}</span>
+    virtual_ipaddress <span class="o">{</span>
+    100.112.76.192
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+virtual_server 100.112.76.192 80 <span class="o">{</span>
+    delay_loop 6
+    lb_algo rr
+    lb_kind NAT
+    persistence_timeout 50
+    protocol TCP
+
+    real_server 100.112.76.193 8080 <span class="o">{</span>
+        weight 1
+        SSL_GET <span class="o">{</span>
+            url <span class="o">{</span>
+              path /
+              digest ff20ad2481f97b1754ef3e12ecd3a9cc
+            <span class="o">}</span>
+            url <span class="o">{</span>
+              path /mrtg/
+              digest 9b3a0c85a887a256d6939da88aabd8cd
+            <span class="o">}</span>
+            connect_timeout 3
+            nb_get_retry 3
+            delay_before_retry 3
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>tomcat 端口8080  <br />
+curl 一下tomcat的8080端口，可通 <br />
+curl 一下100.112.76.193:8080 获取默认页面 <br />
+curl 一下100.112.76.192:80 获取默认页面</p>
+
 
         <div id="disqus_container">
             <class="comment"/>
@@ -79,9 +175,9 @@
         <h2>技术</h2>
         <ul class="artical-list">
         
-            <li><a href="/centos7-lvm%E6%89%A9%E5%A4%A7lv">LVM扩大LV</a></li>
-        
             <li><a href="/lvm%E6%89%A9%E5%A4%A7lv">LVM扩大LV</a></li>
+        
+            <li><a href="/LVS+Keepalived+tomcat%E6%A8%A1%E5%9E%8B">LVS+Keepalived+tomcat配置示例</a></li>
         
             <li><a href="/%E5%AF%B9%E7%AD%89%E8%BF%9E%E6%8E%A5">对等连接</a></li>
         

@@ -38,6 +38,8 @@
             <li class="on" style="text-align:right"><a href="/project"><span>关于我</span></a></li>
         </ul>
 
+        <div class="cate-bar"><span id="cateBar"></span></div>
+
         <ul class="artical-list">
         
         </ul>

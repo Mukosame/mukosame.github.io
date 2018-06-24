@@ -13,9 +13,9 @@ layout: home
         <ul class="artical-list">
         {% for post in site.categories.project limit:1 %}
             <li>
-                <h2>
+                <p>
                 {{post.content}}
-                </h2>
+                </p>
             </li>
         {% endfor %}
         </ul>

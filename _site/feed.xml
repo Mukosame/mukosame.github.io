@@ -8,31 +8,6 @@
 		
 			
 			<item>
-				<title></title>
-				
-					<description></description>
-				
-				<pubDate>Sun, 24 Jun 2018 02:24:54 +0800</pubDate>
-				<link>http://localhost:4000/2018-06-12-LVS+Keepalived+tomcat%E6%A8%A1%E5%9E%8B</link>
-				<guid isPermaLink="true">http://localhost:4000/2018-06-12-LVS+Keepalived+tomcat%E6%A8%A1%E5%9E%8B</guid>
-			</item>
-			
-		
-			
-			<item>
-				<title>LVM扩大LV</title>
-				
-					<description>
-</description>
-				
-				<pubDate>Sat, 23 Jun 2018 00:00:00 +0800</pubDate>
-				<link>http://localhost:4000/centos7-lvm%E6%89%A9%E5%A4%A7lv</link>
-				<guid isPermaLink="true">http://localhost:4000/centos7-lvm%E6%89%A9%E5%A4%A7lv</guid>
-			</item>
-			
-		
-			
-			<item>
 				<title>LVM扩大LV</title>
 				
 					<description>&lt;p&gt;前提：
@@ -55,6 +30,24 @@ tmpfs                    752M   44K  752M   1% /run/user/1000
 				<pubDate>Fri, 22 Jun 2018 00:00:00 +0800</pubDate>
 				<link>http://localhost:4000/lvm%E6%89%A9%E5%A4%A7lv</link>
 				<guid isPermaLink="true">http://localhost:4000/lvm%E6%89%A9%E5%A4%A7lv</guid>
+			</item>
+			
+		
+			
+			<item>
+				<title>LVS+Keepalived+tomcat配置示例</title>
+				
+					<description>&lt;p&gt;前提： &lt;br /&gt;
+已安装lvsadm   &lt;br /&gt;
+已安装keepalived &lt;br /&gt;
+已关闭selinux防火墙 &lt;br /&gt;
+已安装tomcat并安装webapp&lt;/p&gt;
+
+</description>
+				
+				<pubDate>Tue, 12 Jun 2018 00:00:00 +0800</pubDate>
+				<link>http://localhost:4000/LVS+Keepalived+tomcat%E6%A8%A1%E5%9E%8B</link>
+				<guid isPermaLink="true">http://localhost:4000/LVS+Keepalived+tomcat%E6%A8%A1%E5%9E%8B</guid>
 			</item>
 			
 		
