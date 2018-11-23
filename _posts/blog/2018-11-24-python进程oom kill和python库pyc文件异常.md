@@ -2,7 +2,7 @@
 layout: post
 title: python进程OOM和python库pyc损坏的关系
 categories: blog
-description:consul进程使用cgroup进行资源限制，在内存不够的时候被oom kill了。再次重启的时候由于python库中pyc文件不能用，导致再次启动失败...oom和pyc文件损坏有关系吗？
+description: consul进程使用cgroup进行资源限制，在内存不够的时候被oom kill了。再次重启的时候由于python库中pyc文件不能用，导致再次启动失败...oom和pyc文件损坏有关系吗？
 ---
 
 背景：    
