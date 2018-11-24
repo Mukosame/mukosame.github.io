@@ -12,6 +12,16 @@ description: consul进程使用cgroup进行资源限制，在内存不够的时�
 问题：consul进程内存超过100M，被系统oom kill掉了；   
 python脚本再次启动失败，具体看的时候发现python脚本无法import原生的pyc文件；    
 查看pyc文件发现大小较小，怀疑pyc文件损坏      
+
+
+11-23 10：00 容器构造oom killer，一千三百多此，pyc文件不可用又出现一次。   
+
+
+10:00 昨天在虚拟机里面浮现进程内存已经设置的很小了，但是没有oom killer。    
+原因是虚拟机里面有swap，关闭swap后也会oom    
+
+
+
      
 ```
 
