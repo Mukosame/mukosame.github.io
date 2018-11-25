@@ -21,6 +21,25 @@ python脚本再次启动失败，具体看的时候发现python脚本无法impor
 原因是虚拟机里面有swap，关闭swap后也会oom    
 
 
+求助某python大神一起分析，名翔神
+
+11-24 15:00 经翔神分析pyc，发现：
+```
+pyc文件不是新生成的，里面的时间还是2018年1月1号，看来不知道为什么oom之后它就被truncate了 
+
+现在我理解应该是重启的时候不知道为什么触发了重新编译，然后可能在这种环境下触发了Python的import bug，Python好像的确有一个bug会导致写了一个空的codeobject进去
+
+内容是完整的，只是内容是错误的
+
+我们的业务进程OOM死掉后，业务进程重启，Python会启动，Python启动过程中会import标准库，比如encodings,re，这个过程涉及到读文件，但因为内存不过，首先读pyc失败，认为没有pyc，于是重新编译，重新编译的时候读文件又失败，触发了Python2中的一个bug，写入了一个空的pyc
+
+今年刚修复,修复之后这种情况下启动的时候直接报IOError    
+
+https://github.com/python/cpython/commit/f64c813de84011a84ca21d75a294861a9cc2dfdc    
+
+https://bugs.python.org/issue25083 可以参考这个问题单，人家出现的问题现象基本和我们一致，一个大小极小的pyc文件，然后报不想关的错误，它里面也提供了重现的方法。    
+           
+```
 
      
 ```
