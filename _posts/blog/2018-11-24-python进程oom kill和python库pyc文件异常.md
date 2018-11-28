@@ -46,4 +46,12 @@ https://bugs.python.org/issue25083 可以参考这个问题单，人家出现的
 补丁的python环境，也没有出现pyc问题   
 
 11-26 23:00 三个容器，其中两个容器回退python验证，另外一个容器继续使用带补丁的python环境；持续观察   
+
+11-28 15:00 带补丁的python环境复现情况，其中复现了一晚上进程oom，但是没有出现pyc文件损坏导致；    
+观察日志，发现有如下日志
+```
+Error: I/O error while reading
+```
+
+
      
