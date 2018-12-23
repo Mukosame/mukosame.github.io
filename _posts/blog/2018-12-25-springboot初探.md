@@ -99,7 +99,7 @@ description: 出于对既有web项目的分布式改造,初探springboot...
 ```
 
 二、看下项目工程
-![](/images/2018-12-25-springboot初探_images/c7e57ee3.png)
+![](https://github.com/XiaoDongZhi/XiaoDongZhi.github.io/blob/master/images/2018-12-25-springboot初探_images/c7e57ee3.png)
 java代码包：   
 ZstoreAdminApplication.java:   
 代码如下，主要干两个事情，main class以及Controller：   
@@ -235,7 +235,7 @@ phone.item="zte"
 
 验证：
 1、mvn package打包   
-![](/images/2018-12-25-springboot初探_images/c901477b.png)   
+![](https://github.com/XiaoDongZhi/XiaoDongZhi.github.io/blob/master/images/2018-12-25-springboot初探_images/c901477b.png)   
 2、java -jar zstore-admin-0.0.1-SNAPSHOT.jar   
 3、浏览器验证下：   
-![](/images/2018-12-25-springboot初探_images/033bcd0d.png)   
+![](https://github.com/XiaoDongZhi/XiaoDongZhi.github.io/blob/master/images/2018-12-25-springboot初探_images/033bcd0d.png)   
