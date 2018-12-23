@@ -100,11 +100,11 @@ description: 出于对既有web项目的分布式改造,初探springboot...
 
 二、看下项目工程
 ![](.2018-12-25-springboot初探_images/c7e57ee3.png)
-java代码包：
-ZstoreAdminApplication.java:
-代码如下，主要干两个事情，main class以及Controller：
-1、Controller:作为RestAPI资源层，声明API的URI和实现
-2、Main Application:Springboot的Main Application，启动Springboot应用   
+java代码包：   
+ZstoreAdminApplication.java:   
+代码如下，主要干两个事情，main class以及Controller：   
+1、Controller:作为RestAPI资源层，声明API的URI和实现   
+2、Main Application:Springboot的Main Application，启动Springboot应用      
 ```java
 package per.zad.zstore.zstoreadmin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -234,8 +234,8 @@ phone.item="zte"
 ```
 
 验证：
-1、mvn package打包
-![](.2018-12-25-springboot初探_images/c901477b.png)
-2、java -jar zstore-admin-0.0.1-SNAPSHOT.jar
-3、浏览器验证下：
-![](.2018-12-25-springboot初探_images/033bcd0d.png)
+1、mvn package打包   
+![](.2018-12-25-springboot初探_images/c901477b.png)   
+2、java -jar zstore-admin-0.0.1-SNAPSHOT.jar   
+3、浏览器验证下：   
+![](.2018-12-25-springboot初探_images/033bcd0d.png)   
