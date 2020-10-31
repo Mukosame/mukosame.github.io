@@ -1,6 +1,6 @@
 module.exports = {
   "title": "zdblog",
-  "base":"/XiaoDongZhi.github.io/"
+  "base":"/XiaoDongZhi.github.io/",
   "description": "Zhi Dong' Blog",
   "head": [
     [
