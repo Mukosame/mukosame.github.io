@@ -8,10 +8,13 @@
   },
   "devDependencies": {
     "vuepress": "1.5.4",
-    "vuepress-theme-reco": "1.5.7"
+    "vuepress-theme-reco": "1.5.7",
+    "vuepress-plugin-cursor-effects": "^0.0.4",
+    "vuepress-plugin-ribbon": "^1.0.0"
   },
   "dependencies": {
-    "vue-class-component": "^7.2.3"
+    "vue-class-component": "^7.2.3",
+    "vue-router": "^3.4.5"
   },
   "description": "Zhi Dong' Blog"
 }
